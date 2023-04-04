@@ -1,7 +1,7 @@
 /* global ethers */
 /* eslint prefer-const: "off" */
 
-const { getSelectors, FacetCutAction } = require("./libraries/diamond.js");
+const { getSelectors, FacetCutAction } = require("../libraries/diamond.js");
 
 async function erc20Token() {
     const accounts = await ethers.getSigners();
@@ -10,24 +10,12 @@ async function erc20Token() {
 
     const FacetNames = [
         {
-            name: "SokosToken",
-            address: null,
-        },
-        {
             name: "ERC20Metadata",
-            address: null,
+            address: "0xf7F02d53BEDF198ea9BC566Fd6877ECE9d31a14C",
         },
         {
             name: "ERC20MetadataOwnable",
-            address: null,
-        },
-        {
-            name: "ERC20SupplyOwnable",
-            address: null,
-        },
-        {
-            name: "ERC20MintableOwnableERC2771",
-            address: null,
+            address: "0x320AE368bc1275d51363C2179004bD96Ce58E96A",
         },
     ];
     const cut = [];

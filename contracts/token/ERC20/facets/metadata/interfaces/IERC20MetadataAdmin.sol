@@ -6,4 +6,10 @@ interface IERC20MetadataAdmin {
     function setDecimals(uint8 newDecimals) external;
 
     function lockDecimals() external;
+
+    function setName(string memory newName) external;
+
+    function setSymbol(string memory newSymbol) external;
+
+    function lockNameAndSymbol() external;
 }

@@ -6,4 +6,6 @@ interface IMetadata {
     function name() external view returns (string memory);
 
     function symbol() external view returns (string memory);
+
+    function nameAndSymbolLocked() external view returns (bool);
 }

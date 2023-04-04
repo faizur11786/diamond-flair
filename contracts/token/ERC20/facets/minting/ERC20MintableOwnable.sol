@@ -5,7 +5,7 @@ pragma solidity ^0.8.15;
 import "../../../../common/Errors.sol";
 import "../../../../access/ownable/OwnableInternal.sol";
 import "../../extensions/mintable/IERC20MintableExtension.sol";
-import "./IERC20MintableOwnable.sol";
+import "./interfaces/IERC20MintableOwnable.sol";
 
 /**
  * @title ERC20 - Mint as owner

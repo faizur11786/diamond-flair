@@ -4,8 +4,8 @@ pragma solidity ^0.8.15;
 
 import "../../extensions/supply/ERC20SupplyStorage.sol";
 import "../../../../access/ownable/OwnableInternal.sol";
-import "./ERC20SupplyAdminStorage.sol";
-import "./IERC20SupplyAdmin.sol";
+import "./storage/ERC20SupplyAdminStorage.sol";
+import "./interfaces/IERC20SupplyAdmin.sol";
 
 abstract contract ERC20SupplyAdminInternal {
     using ERC20SupplyAdminStorage for ERC20SupplyAdminStorage.Layout;

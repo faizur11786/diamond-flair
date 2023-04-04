@@ -1,7 +1,7 @@
 /* global ethers */
 /* eslint prefer-const: "off" */
 
-const { getSelectors, FacetCutAction } = require("./libraries/diamond.js");
+const { getSelectors, FacetCutAction } = require("./../libraries/diamond.js");
 
 async function erc20Token() {
     const accounts = await ethers.getSigners();
@@ -9,25 +9,13 @@ async function erc20Token() {
     const diamondAddress = "0xC68370956A07471882290ad82281C3e6E3014532";
 
     const FacetNames = [
-        {
-            name: "SokosToken",
-            address: null,
-        },
-        {
-            name: "ERC20Metadata",
-            address: null,
-        },
+        // {
+        //     name: "ERC20Metadata",
+        //     address: ethers.constants.AddressZero,
+        // },
         {
             name: "ERC20MetadataOwnable",
-            address: null,
-        },
-        {
-            name: "ERC20SupplyOwnable",
-            address: null,
-        },
-        {
-            name: "ERC20MintableOwnableERC2771",
-            address: null,
+            address: ethers.constants.AddressZero,
         },
     ];
     const cut = [];
@@ -47,8 +35,11 @@ async function erc20Token() {
 
         cut.push({
             facetAddress: facet.address,
-            action: FacetCutAction.Add,
-            functionSelectors: getSelectors(facet),
+            action: FacetCutAction.Remove,
+            functionSelectors: getSelectors(facet).get([
+                "lockDecimals()",
+                "setDecimals(uint8)",
+            ]),
         });
     }
     console.log("Cut", cut);

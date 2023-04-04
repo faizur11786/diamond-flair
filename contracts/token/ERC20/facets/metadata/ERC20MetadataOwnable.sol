@@ -4,11 +4,11 @@ pragma solidity ^0.8.15;
 
 import "@openzeppelin/contracts/utils/Strings.sol";
 
-import "../../../../access/ownable/OwnableInternal.sol";
+import {OwnableInternal} from "../../../../access/ownable/OwnableInternal.sol";
 
-import "./ERC20MetadataInternal.sol";
-import "./ERC20MetadataStorage.sol";
-import "./IERC20MetadataAdmin.sol";
+import {ERC20MetadataInternal} from "./ERC20MetadataInternal.sol";
+import {ERC20MetadataStorage} from "./storage/ERC20MetadataStorage.sol";
+import {IERC20MetadataAdmin} from "./interfaces/IERC20MetadataAdmin.sol";
 
 /**
  * @title ERC20 - Metadata - Admin - Ownable
@@ -33,5 +33,28 @@ contract ERC20MetadataOwnable is
     function lockDecimals() external override onlyOwner {
         ERC20MetadataStorage.Layout storage l = ERC20MetadataStorage.layout();
         l.decimalsLocked = true;
+    }
+
+    function setName(string memory newName) external override onlyOwner {
+        ERC20MetadataStorage.Layout storage l = ERC20MetadataStorage.layout();
+        require(
+            !l.nameAndSymbolLocked,
+            "ERC20MetadataOwnable: name and symbol locked"
+        );
+        l.name = newName;
+    }
+
+    function setSymbol(string memory newSymbol) external override onlyOwner {
+        ERC20MetadataStorage.Layout storage l = ERC20MetadataStorage.layout();
+        require(
+            !l.nameAndSymbolLocked,
+            "ERC20MetadataOwnable: name and symbol locked"
+        );
+        l.symbol = newSymbol;
+    }
+
+    function lockNameAndSymbol() external override onlyOwner {
+        ERC20MetadataStorage.Layout storage l = ERC20MetadataStorage.layout();
+        l.nameAndSymbolLocked = true;
     }
 }

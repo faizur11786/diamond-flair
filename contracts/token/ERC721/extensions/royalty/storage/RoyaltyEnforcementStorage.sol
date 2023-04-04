@@ -2,14 +2,13 @@
 
 pragma solidity ^0.8.15;
 
-library ERC20MetadataStorage {
-    struct Layout {
-        uint8 decimals;
-        bool decimalsLocked;
-    }
-
+library RoyaltyEnforcementStorage {
     bytes32 internal constant STORAGE_SLOT =
-        keccak256("v2.flair.contracts.storage.ERC20Metadata");
+        keccak256("v2.flair.contracts.storage.RoyaltyEnforcement");
+
+    struct Layout {
+        bool enforceRoyalties;
+    }
 
     function layout() internal pure returns (Layout storage l) {
         bytes32 slot = STORAGE_SLOT;

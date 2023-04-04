@@ -15,7 +15,7 @@ import "./extensions/burnable/ERC20BurnableExtension.sol";
  * @custom:category Tokens
  * @custom:provides-interfaces IERC20 IERC20Base IERC20SupplyExtension IERC20MintableExtension
  */
-contract ERC20WithERC2771 is
+contract SokosToken is
     ERC20BaseERC2771,
     ERC20SupplyExtension,
     ERC20MintableExtension

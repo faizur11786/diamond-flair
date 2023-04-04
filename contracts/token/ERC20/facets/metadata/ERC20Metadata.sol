@@ -2,8 +2,7 @@
 
 pragma solidity ^0.8.15;
 
-import {Metadata} from "../../../common/metadata/Metadata.sol";
-import {IERC20Metadata} from "./IERC20Metadata.sol";
+import {IERC20Metadata} from "./interfaces/IERC20Metadata.sol";
 import {ERC20MetadataInternal} from "./ERC20MetadataInternal.sol";
 
 /**
@@ -14,7 +13,7 @@ import {ERC20MetadataInternal} from "./ERC20MetadataInternal.sol";
  * @custom:category Tokens
  * @custom:provides-interfaces IERC20Metadata
  */
-contract ERC20Metadata is Metadata, IERC20Metadata, ERC20MetadataInternal {
+contract ERC20Metadata is IERC20Metadata, ERC20MetadataInternal {
     /**
      * @inheritdoc IERC20Metadata
      */
@@ -24,5 +23,17 @@ contract ERC20Metadata is Metadata, IERC20Metadata, ERC20MetadataInternal {
 
     function decimalsLocked() external view returns (bool) {
         return _decimalsLocked();
+    }
+
+    function name() external view returns (string memory) {
+        return _name();
+    }
+
+    function symbol() external view returns (string memory) {
+        return _symbol();
+    }
+
+    function nameAndSymbolLocked() external view returns (bool) {
+        return _nameAndSymbolLocked();
     }
 }

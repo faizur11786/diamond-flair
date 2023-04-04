@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.15;
 
-import {ERC20MetadataStorage} from "./ERC20MetadataStorage.sol";
+import {ERC20MetadataStorage} from "./storage/ERC20MetadataStorage.sol";
 
 /**
  * @title ERC20Metadata internal functions
@@ -20,13 +20,15 @@ abstract contract ERC20MetadataInternal {
         return ERC20MetadataStorage.layout().decimalsLocked;
     }
 
-    function _setDecimals(uint8 decimals_) internal virtual {
-        require(!_decimalsLocked(), "ERC20Metadata: decimals locked");
-        ERC20MetadataStorage.layout().decimals = decimals_;
-        ERC20MetadataStorage.layout().decimalsLocked = true;
+    function _name() internal view virtual returns (string memory) {
+        return ERC20MetadataStorage.layout().name;
     }
 
-    function _setDecimalsLocked(bool decimalsLocked_) internal virtual {
-        ERC20MetadataStorage.layout().decimalsLocked = decimalsLocked_;
+    function _symbol() internal view virtual returns (string memory) {
+        return ERC20MetadataStorage.layout().symbol;
+    }
+
+    function _nameAndSymbolLocked() internal view virtual returns (bool) {
+        return ERC20MetadataStorage.layout().nameAndSymbolLocked;
     }
 }

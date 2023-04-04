@@ -5,7 +5,7 @@ pragma solidity ^0.8.15;
 import "../../extensions/supply/ERC20SupplyStorage.sol";
 import "../../../../access/ownable/OwnableInternal.sol";
 import "./ERC20SupplyAdminInternal.sol";
-import "./IERC20SupplyAdmin.sol";
+import "./interfaces/IERC20SupplyAdmin.sol";
 
 /**
  * @title ERC20 - Supply - Admin - Ownable
