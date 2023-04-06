@@ -43,7 +43,7 @@ module.exports = {
         },
         goerli: {
             url: "https://nd-719-675-074.p2pify.com/633210afb47eeb316abfc98e05db1dba",
-            accounts: [`${process.env.PRIV_KEY}`],
+            accounts: [`${process.env.PRIV_KEY2}`],
             chainId: 5,
         },
     },

@@ -17,7 +17,7 @@ import "./extensions/royalty/ERC721ARoyaltyEnforcementExtension.sol";
  * @custom:category NFTs
  * @custom:provides-interfaces IERC721 IERC5192 IERC721ABase IERC721SupplyExtension IERC721MintableExtension IERC721LockableExtension IERC721BurnableExtension IRoyaltyEnforcement
  */
-contract ERC721AWithERC2771 is
+contract SokosERC721A is
     ERC721ABaseERC2771,
     ERC721ASupplyExtension,
     ERC721AMintableExtension,
