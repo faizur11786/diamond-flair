@@ -33,7 +33,7 @@ module.exports = {
     networks: {
         mumbai: {
             url: "https://nd-462-884-459.p2pify.com/70eaca77551eac07163154a14c5e9432",
-            accounts: [`${process.env.PRIV_KEY2}`, `${process.env.PRIV_KEY}`],
+            accounts: [`${process.env.PRIV_KEY}`, `${process.env.PRIV_KEY}`],
             chainId: 80001,
         },
         mumbaiOwner: {

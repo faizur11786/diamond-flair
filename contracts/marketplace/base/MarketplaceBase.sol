@@ -9,7 +9,7 @@ import {MarketplaceBaseStorage} from "./storage/MarketplaceBaseStorage.sol";
 /**
  * @title Base ERC20 implementation, excluding optional extensions
  */
-abstract contract MarketplaceBase is IMarketplaceBase, MarketplaceBaseInternal {
+abstract contract MarketplaceBase is MarketplaceBaseInternal, IMarketplaceBase {
     function fee() external view returns (uint16) {
         return _fee();
     }
@@ -24,5 +24,11 @@ abstract contract MarketplaceBase is IMarketplaceBase, MarketplaceBaseInternal {
 
     function feeReceipient() external view returns (address) {
         return _feeReceipient();
+    }
+
+    function getPayableTokens(
+        address token
+    ) external view returns (MarketplaceBaseStorage.TokenFeed memory) {
+        return _getPayableToken(token);
     }
 }

@@ -3,16 +3,26 @@
 pragma solidity ^0.8.15;
 
 interface IMarketplaceBaseOwnable {
-    event FeeUpdate(uint16 newFee);
-    event MintFeeUpdate(uint16 newMintFee);
+    event FeeUpdate(uint104 newFee);
+    event MintFeeUpdate(uint104 newMintFee);
     event DecimalsUpdate(uint8 newDecimals);
     event FeeReceipientUpdate(address newAddress);
+    event PaymentOptionAdded(address token, address feed, uint8 decimals);
+    event PaymentOptionRemoved(address token);
 
-    function setFee(uint16 newFee) external;
+    function setFee(uint104 newFee) external;
 
-    function setMintFee(uint16 newMintFee) external;
+    function setMintFee(uint104 newMintFee) external;
 
     function setDecimals(uint8 newDecimals) external;
 
     function setFeeReceipient(address newAddress) external;
+
+    function addPayableToken(
+        address token,
+        address feed,
+        uint8 decimals
+    ) external;
+
+    function removeTokenFeed(address token) external;
 }

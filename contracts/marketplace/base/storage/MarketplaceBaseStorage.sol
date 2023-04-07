@@ -3,11 +3,17 @@
 pragma solidity ^0.8.15;
 
 library MarketplaceBaseStorage {
+    struct TokenFeed {
+        address feed;
+        uint8 decimals;
+    }
+
     struct Layout {
-        uint16 sokosFee;
-        uint16 mintFee;
+        uint104 sokosFee;
+        uint104 mintFee;
         uint8 sokosDecimals;
         address payable feeReceipient;
+        mapping(address => TokenFeed) payableToken;
     }
 
     bytes32 internal constant STORAGE_SLOT =

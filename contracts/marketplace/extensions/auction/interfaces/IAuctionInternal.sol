@@ -14,4 +14,19 @@ interface IAuctionInternal {
         uint256 endTime,
         address indexed creator
     );
+    event PlacedBid(
+        address indexed nft,
+        uint256 indexed tokenId,
+        address payToken,
+        uint256 bidPrice,
+        address indexed bidder
+    );
+    event ResultedAuction(
+        address indexed nft,
+        uint256 indexed tokenId,
+        address creator,
+        address indexed winner,
+        uint256 price,
+        address caller
+    );
 }

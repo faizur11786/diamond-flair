@@ -4,10 +4,8 @@ pragma solidity ^0.8.15;
 
 import "./base/MarketplaceBaseERC2771.sol";
 import {AuctionExtension} from "./extensions/auction/AuctionExtension.sol";
-
-// import "./extensions/supply/ERC20SupplyExtension.sol";
-// import "./extensions/mintable/ERC20MintableExtension.sol";
-// import "./extensions/burnable/ERC20BurnableExtension.sol";
+import {ERC1155ListExtension} from "./extensions/ERC1155List/ERC1155ListExtension.sol";
+import {MarketplaceBaseInternal} from "./base/MarketplaceBaseInternal.sol";
 
 /**
  * @title Marketplace - with meta-transactions
@@ -17,7 +15,11 @@ import {AuctionExtension} from "./extensions/auction/AuctionExtension.sol";
  * @custom:category Marketplace
  * @custom:provides-interfaces IMarketplace IMarketplaceBase IAuctionExtension IMarketplaceMintableExtension
  */
-contract Marketplace is MarketplaceBaseERC2771, AuctionExtension {
+contract Marketplace is
+    MarketplaceBaseERC2771,
+    AuctionExtension,
+    ERC1155ListExtension
+{
     function _msgSender()
         internal
         view
@@ -45,7 +47,7 @@ contract Marketplace is MarketplaceBaseERC2771, AuctionExtension {
         address from,
         address to,
         uint256 amount
-    ) internal virtual override(MarketplaceBaseInternal, ERC20SupplyExtension) {
-        ERC20SupplyExtension._beforeTokenTransfer(from, to, amount);
+    ) internal virtual override(MarketplaceBaseInternal) {
+        MarketplaceBaseInternal._beforeTokenTransfer(from, to, amount);
     }
 }

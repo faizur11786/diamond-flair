@@ -16,9 +16,9 @@ interface IAuctionExtension {
         uint256 endTime
     ) external;
 
-    // function cancelAuction(address nft, uint256 tokenId) external;
+    function cancelAuction(address nft, uint256 tokenId) external;
 
-    // function bidPlace(address nft, uint256 tokenId, uint256 bidPrice) external;
+    function bidPlace(address nft, uint256 tokenId, uint256 bidPrice) external;
 
-    // function resultAuction(address nft, uint256 tokenId) external;
+    function resultAuction(address nft, uint256 tokenId) external;
 }
