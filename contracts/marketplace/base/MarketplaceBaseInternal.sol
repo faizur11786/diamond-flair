@@ -21,11 +21,11 @@ abstract contract MarketplaceBaseInternal is Context, IMarketplaceBaseInternal {
         _;
     }
 
-    function _fee() internal view virtual returns (uint16) {
+    function _fee() internal view virtual returns (uint104) {
         return MarketplaceBaseStorage.layout().sokosFee;
     }
 
-    function _mintFee() internal view virtual returns (uint16) {
+    function _mintFee() internal view virtual returns (uint104) {
         return MarketplaceBaseStorage.layout().mintFee;
     }
 

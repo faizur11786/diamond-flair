@@ -33,7 +33,9 @@ contract UnorderedForwarder is EIP712, ReentrancyGuard {
     /// @dev Refunds up to `msg.value` leftover ETH at the end of the call.
     modifier refundsAttachedEth() {
         _;
-        uint256 remainingBalance = msg.value > address(this).balance ? address(this).balance : msg.value;
+        uint256 remainingBalance = msg.value > address(this).balance
+            ? address(this).balance
+            : msg.value;
         if (remainingBalance > 0) {
             payable(msg.sender).transfer(remainingBalance);
         }
@@ -47,10 +49,23 @@ contract UnorderedForwarder is EIP712, ReentrancyGuard {
         require(initialBalance <= address(this).balance, "FWD_ETH_LEAK");
     }
 
-    function verify(MetaTransaction calldata mtx, bytes calldata signature) public view returns (bytes32 mtxHash) {
+    function verify(
+        MetaTransaction calldata mtx,
+        bytes calldata signature
+    ) public view returns (bytes32 mtxHash) {
         mtxHash = _hashTypedDataV4(
             keccak256(
-                abi.encode(_TYPEHASH, mtx.from, mtx.to, mtx.value, mtx.minGasPrice, mtx.maxGasPrice, mtx.expiresAt, mtx.nonce, keccak256(mtx.data))
+                abi.encode(
+                    _TYPEHASH,
+                    mtx.from,
+                    mtx.to,
+                    mtx.value,
+                    mtx.minGasPrice,
+                    mtx.maxGasPrice,
+                    mtx.expiresAt,
+                    mtx.nonce,
+                    keccak256(mtx.data)
+                )
             )
         );
 
@@ -58,7 +73,10 @@ contract UnorderedForwarder is EIP712, ReentrancyGuard {
         require(mtx.expiresAt > block.timestamp, "FWD_EXPIRED");
 
         // Must be signed by the signer.
-        require(mtxHash.recover(signature) == mtx.from, "FWD_INVALID_SIGNATURE");
+        require(
+            mtxHash.recover(signature) == mtx.from,
+            "FWD_INVALID_SIGNATURE"
+        );
 
         // Transaction must not have been already executed.
         require(mtxHashToExecutedBlockNumber[mtxHash] == 0, "FWD_REPLAYED");
@@ -69,14 +87,28 @@ contract UnorderedForwarder is EIP712, ReentrancyGuard {
     function execute(
         MetaTransaction calldata mtx,
         bytes calldata signature
-    ) public payable nonReentrant doesNotReduceEthBalance refundsAttachedEth returns (bytes memory) {
+    )
+        public
+        payable
+        nonReentrant
+        doesNotReduceEthBalance
+        refundsAttachedEth
+        returns (bytes memory)
+    {
         return _execute(mtx, signature);
     }
 
     function batchExecute(
         MetaTransaction[] calldata mtxs,
         bytes[] calldata signatures
-    ) public payable nonReentrant doesNotReduceEthBalance refundsAttachedEth returns (bytes[] memory returnResults) {
+    )
+        public
+        payable
+        nonReentrant
+        doesNotReduceEthBalance
+        refundsAttachedEth
+        returns (bytes[] memory returnResults)
+    {
         require(mtxs.length == signatures.length, "FWD_MISMATCH_SIGNATURES");
 
         returnResults = new bytes[](mtxs.length);
@@ -86,9 +118,15 @@ contract UnorderedForwarder is EIP712, ReentrancyGuard {
         }
     }
 
-    function _execute(MetaTransaction calldata mtx, bytes calldata signature) internal returns (bytes memory) {
+    function _execute(
+        MetaTransaction calldata mtx,
+        bytes calldata signature
+    ) internal returns (bytes memory) {
         // Must have a valid gas price.
-        require(mtx.minGasPrice <= tx.gasprice && tx.gasprice <= mtx.maxGasPrice, "FWD_INVALID_GAS");
+        require(
+            mtx.minGasPrice <= tx.gasprice && tx.gasprice <= mtx.maxGasPrice,
+            "FWD_INVALID_GAS"
+        );
 
         // Must have enough ETH.
         require(mtx.value <= address(this).balance, "FWD_INVALID_VALUE");
@@ -97,7 +135,9 @@ contract UnorderedForwarder is EIP712, ReentrancyGuard {
 
         mtxHashToExecutedBlockNumber[mtxHash] = block.number;
 
-        (bool success, bytes memory returndata) = mtx.to.call{value: mtx.value}(abi.encodePacked(mtx.data, mtx.from));
+        (bool success, bytes memory returndata) = mtx.to.call{value: mtx.value}(
+            abi.encodePacked(mtx.data, mtx.from)
+        );
 
         if (!success) {
             // Look for revert reason and bubble it up if present
