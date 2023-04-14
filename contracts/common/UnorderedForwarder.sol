@@ -14,8 +14,7 @@ contract UnorderedForwarder is EIP712, ReentrancyGuard {
         address from;
         address to;
         uint256 value;
-        uint256 minGasPrice;
-        uint256 maxGasPrice;
+        uint256 gas;
         uint256 expiresAt;
         uint256 nonce;
         bytes data;
@@ -23,7 +22,7 @@ contract UnorderedForwarder is EIP712, ReentrancyGuard {
 
     bytes32 private constant _TYPEHASH =
         keccak256(
-            "MetaTransaction(address from,address to,uint256 value,uint256 minGasPrice,uint256 maxGasPrice,uint256 expiresAt,uint256 nonce,bytes data)"
+            "MetaTransaction(address from,address to,uint256 value,uint256 gas,uint256 expiresAt,uint256 nonce,bytes data)"
         );
 
     mapping(bytes32 => uint256) mtxHashToExecutedBlockNumber;
@@ -60,8 +59,7 @@ contract UnorderedForwarder is EIP712, ReentrancyGuard {
                     mtx.from,
                     mtx.to,
                     mtx.value,
-                    mtx.minGasPrice,
-                    mtx.maxGasPrice,
+                    mtx.gas,
                     mtx.expiresAt,
                     mtx.nonce,
                     keccak256(mtx.data)
@@ -70,7 +68,7 @@ contract UnorderedForwarder is EIP712, ReentrancyGuard {
         );
 
         // Must not be expired.
-        require(mtx.expiresAt > block.timestamp, "FWD_EXPIRED");
+        // require(mtx.expiresAt > block.timestamp, "FWD_EXPIRED");
 
         // Must be signed by the signer.
         require(
@@ -123,10 +121,10 @@ contract UnorderedForwarder is EIP712, ReentrancyGuard {
         bytes calldata signature
     ) internal returns (bytes memory) {
         // Must have a valid gas price.
-        require(
-            mtx.minGasPrice <= tx.gasprice && tx.gasprice <= mtx.maxGasPrice,
-            "FWD_INVALID_GAS"
-        );
+        // require(
+        //     mtx.minGasPrice <= tx.gasprice && tx.gasprice <= mtx.maxGasPrice,
+        //     "FWD_INVALID_GAS"
+        // );
 
         // Must have enough ETH.
         require(mtx.value <= address(this).balance, "FWD_INVALID_VALUE");
