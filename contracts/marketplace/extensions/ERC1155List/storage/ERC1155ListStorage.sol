@@ -25,7 +25,7 @@ library ERC1155ListStorage {
     }
 
     bytes32 internal constant STORAGE_SLOT =
-        keccak256("sokos.contracts.storage.erc1155");
+        keccak256("sokos.contracts.storage.listing");
 
     function layout() internal pure returns (Layout storage l) {
         bytes32 slot = STORAGE_SLOT;
