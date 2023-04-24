@@ -40,8 +40,6 @@ library AuctionStorage {
         mapping(address => mapping(uint256 => AuctionNFT)) auctionNfts;
         // nft => tokenId => list struct
         mapping(address => mapping(uint256 => ListNFT)) listNfts;
-        // nft => tokenId => offerer address => offer struct
-        mapping(address => mapping(uint256 => mapping(address => OfferNFT))) offerNfts;
     }
 
     bytes32 internal constant STORAGE_SLOT =

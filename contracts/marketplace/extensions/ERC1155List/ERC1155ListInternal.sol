@@ -26,16 +26,34 @@ abstract contract ERC1155ListInternal is
         uint256 _quantity,
         uint256 _priceInUsd
     ) internal {
-        IERC1155 erc1155Token = IERC1155(_tokenAddress);
+        IERC1155 erc1155Token;
+        IERC721 erc721Token;
+        if (IERC165(_tokenAddress).supportsInterface(INTERFACE_ID_ERC721)) {
+            erc721Token = IERC721(_tokenAddress);
+            require(
+                erc721Token.ownerOf(_tokenId) == _msgSender(),
+                "Not owning item"
+            );
+            require(
+                erc721Token.isApprovedForAll(_msgSender(), address(this)),
+                "Not approved for transfer"
+            );
+        } else if (
+            IERC165(_tokenAddress).supportsInterface(INTERFACE_ID_ERC1155)
+        ) {
+            erc1155Token = IERC1155(_tokenAddress);
+            require(
+                erc1155Token.balanceOf(_msgSender(), _tokenId) >= _quantity,
+                "Not enough ERC1155 token"
+            );
+            require(
+                erc1155Token.isApprovedForAll(_msgSender(), address(this)),
+                "Not approved for transfer"
+            );
+        } else {
+            revert("INVALID_NFT");
+        }
 
-        require(
-            erc1155Token.balanceOf(_msgSender(), _tokenId) >= _quantity,
-            "Not enough ERC1155 token"
-        );
-        require(
-            erc1155Token.isApprovedForAll(_msgSender(), address(this)),
-            "Not approved for transfer"
-        );
         ERC1155ListStorage.Layout storage l = ERC1155ListStorage.layout();
 
         uint256 listingId = l.erc1155TokenToListingId[_tokenAddress][_tokenId][
@@ -88,23 +106,45 @@ abstract contract ERC1155ListInternal is
         }
     }
 
-    // function _ERC1155ListNft(
-    //     address _nft,
-    //     uint256 _tokenId,
-    //     address _payToken,
-    //     uint256 _price
-    // ) external isPayableToken(_payToken) {
-    //     IERC721 nft = IERC721(_nft);
-    //     require(nft.ownerOf(_tokenId) == msg.sender, "not nft owner");
-    //     nft.transferFrom(msg.sender, address(this), _tokenId);
-    //     ERC1155ListNfts[_nft][_tokenId] = ERC1155ListNFT({
-    //         nft: _nft,
-    //         tokenId: _tokenId,
-    //         seller: msg.sender,
-    //         payToken: _payToken,
-    //         price: _price,
-    //         sold: false
-    //     });
-    //     emit ERC1155ListedNFT(_nft, _tokenId, _payToken, _price, msg.sender);
-    // }
+    function _listedNFT(
+        uint256 listingId
+    ) internal view returns (ERC1155ListStorage.ERC1155Listing memory) {
+        ERC1155ListStorage.Layout storage l = ERC1155ListStorage.layout();
+        return l.erc1155Listings[listingId];
+    }
+
+    function _listedNFTs()
+        internal
+        view
+        returns (ERC1155ListStorage.ERC1155Listing[] memory)
+    {
+        ERC1155ListStorage.Layout storage l = ERC1155ListStorage.layout();
+        uint256 length = l.listingIds.length;
+        ERC1155ListStorage.ERC1155Listing[]
+            memory nfts = new ERC1155ListStorage.ERC1155Listing[](
+                l.listingIds.length
+            );
+        for (uint i = 0; i < length; i++) {
+            ERC1155ListStorage.ERC1155Listing storage nft = l.erc1155Listings[
+                l.listingIds[i]
+            ];
+            nfts[i] = nft;
+        }
+        return nfts;
+    }
+
+    function _listedNFTsByIDs(
+        uint256[] calldata ids
+    ) internal view returns (ERC1155ListStorage.ERC1155Listing[] memory) {
+        ERC1155ListStorage.ERC1155Listing[]
+            memory nfts = new ERC1155ListStorage.ERC1155Listing[](ids.length);
+        ERC1155ListStorage.Layout storage l = ERC1155ListStorage.layout();
+        for (uint i = 0; i < ids.length; i++) {
+            ERC1155ListStorage.ERC1155Listing storage nft = l.erc1155Listings[
+                ids[i]
+            ];
+            nfts[i] = nft;
+        }
+        return nfts;
+    }
 }

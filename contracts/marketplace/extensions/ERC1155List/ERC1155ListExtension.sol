@@ -24,4 +24,28 @@ abstract contract ERC1155ListExtension is
     ) external virtual {
         _createERC1155Listing(tokenAddress, tokenId, quantity, priceInUsd);
     }
+
+    function listingIds() external view returns (uint256[] memory) {
+        return ERC1155ListStorage.layout().listingIds;
+    }
+
+    function listedNFT(
+        uint256 listingId
+    ) external view returns (ERC1155ListStorage.ERC1155Listing memory) {
+        return _listedNFT(listingId);
+    }
+
+    function listedNFTs()
+        external
+        view
+        returns (ERC1155ListStorage.ERC1155Listing[] memory)
+    {
+        return _listedNFTs();
+    }
+
+    function listedNFTsByIDs(
+        uint256[] calldata ids
+    ) external view returns (ERC1155ListStorage.ERC1155Listing[] memory) {
+        return _listedNFTsByIDs(ids);
+    }
 }

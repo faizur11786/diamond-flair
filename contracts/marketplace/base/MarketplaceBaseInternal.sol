@@ -12,6 +12,11 @@ import {MarketplaceBaseStorage} from "./storage/MarketplaceBaseStorage.sol";
  */
 abstract contract MarketplaceBaseInternal is Context, IMarketplaceBaseInternal {
     using MarketplaceBaseStorage for MarketplaceBaseStorage.Layout;
+
+    bytes4 internal constant INTERFACE_ID_ERC721 = 0x80ac58cd;
+    bytes4 internal constant INTERFACE_ID_ERC1155 = 0xd9b67a26;
+    bytes4 internal constant INTERFACE_ID_ERC2981 = 0x2a55205a;
+
     modifier isPayableToken(address _payToken) {
         require(
             _payToken != address(0) &&
