@@ -6,48 +6,24 @@ const { getSelectors, FacetCutAction } = require("../libraries/diamond.js");
 async function erc20Token() {
     const accounts = await ethers.getSigners();
     const contractOwner = accounts[0];
-    const diamondAddress = "0x4E5f019acab52097af2fFB28550EE6f84673Ce6b";
+    const diamondAddress = "0x9F7af917573DB7A510fE54e521CBE779EeFF3d2F";
 
     const FacetNames = [
         {
-            name: "SokosToken",
-            address: "0x19EB979c0045561fe00D59E5947D879B70509f9a",
+            name: "ERC2771Context",
+            address: "0x4C97989Ea3b7f3DC40b64183cCA0E734c08D5DD8",
         },
         {
-            name: "ERC20Metadata",
-            address: "0xA2A4eAbaaDd9272D18e85CCA660824F89e1a99e8",
+            name: "ERC2771ContextOwnable",
+            address: "0xbC65911F3b6BeF213685FF68d8095A6135d1C97e",
         },
         {
-            name: "ERC20MetadataOwnable",
-            address: "0x19cC6B4563870Aa22a8F2ccBAD5875fb85240094",
+            name: "Marketplace",
+            address: "0x5aa004567D3fb70DfcDC93c611808032a3C28d7a",
         },
         {
-            name: "ERC20SupplyOwnable",
-            address: "0xA5B0eE674fB78A7191608e2DFE7737CB7e4a4aFE",
-        },
-        {
-            name: "ERC20MintableOwnableERC2771",
-            address: "0x014056C6BCb6B842ad2FBEcd28c58D50f7950029",
-        },
-        {
-            name: "SokosERC721A",
-            address: "0xa030ccA0e4f14f62b6f23A0448f58e4A8AB6C05E",
-        },
-        {
-            name: "ERC721Metadata",
-            address: "0x1D8d7D162DA021B8D61B32ED9d7ee368f807d30E",
-        },
-        {
-            name: "ERC721SupplyOwnable",
-            address: "0x86296E032C71ec69c9E5c1DDA497098f91d1F76f",
-        },
-        {
-            name: "ERC721MintableOwnableERC2771",
-            address: "0xEf95fc84677e86554C4a23bd34a8dDa0986FA7b9",
-        },
-        {
-            name: "ERC721LockableOwnable",
-            address: "0xF8F9a17cdE74FFc1eaAbC7A0b515e3124B46E346",
+            name: "MarketplaceBaseOwnable",
+            address: "0x0Da76127b3C788759C88878E520e84BB0D87b61b",
         },
     ];
     const cut = [];

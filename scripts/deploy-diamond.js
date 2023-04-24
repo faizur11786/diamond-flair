@@ -7,7 +7,7 @@ async function deployDiamond() {
     const accounts = await ethers.getSigners();
     const contractOwner = accounts[0];
 
-    // deploy DiamondCut
+    // // deploy DiamondCut
     const DiamondCut = await ethers.getContractFactory("DiamondCut");
     const diamondCutFacet = await DiamondCut.deploy();
     await diamondCutFacet.deployed();
@@ -56,12 +56,20 @@ async function deployDiamond() {
 
     const FacetNames = [
         {
+            name: "ERC2771Context",
+            address: null,
+        },
+        {
+            name: "ERC2771ContextOwnable",
+            address: null,
+        },
+        {
             name: "Marketplace",
-            address: "0x12881795BaeFEF33E589706A1aafb492817b8F6A",
+            address: null,
         },
         {
             name: "MarketplaceBaseOwnable",
-            address: "0xeE9282c3D3AdC6cDF60A48db2988C1e45f553447",
+            address: null,
         },
     ];
     const cut = [];
