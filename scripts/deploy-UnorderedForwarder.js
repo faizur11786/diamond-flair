@@ -6,7 +6,7 @@ const { getSelectors, FacetCutAction } = require("./libraries/diamond.js");
 async function erc20Token() {
     const accounts = await ethers.getSigners();
     const contractOwner = accounts[0];
-    const diamondAddress = "0x08291Db3878428d6A0B399adBc64854D0aDa8861";
+    const diamondAddress = "0x9F7af917573DB7A510fE54e521CBE779EeFF3d2F";
 
     const FacetNames = [
         {
