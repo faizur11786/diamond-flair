@@ -57,7 +57,7 @@ contract MarketplaceBaseOwnable is IMarketplaceBaseOwnable, OwnableInternal {
         MarketplaceBaseStorage.TokenFeed memory token = l.payableToken[
             newToken
         ];
-        require(token.feed != address(0), "already payable token");
+        require(token.feed == address(0), "already payable token");
         token.feed = feed;
         token.decimals = decimals;
         emit PaymentOptionAdded(newToken, feed, decimals);

@@ -6,25 +6,25 @@ const { getSelectors, FacetCutAction } = require("../libraries/diamond.js");
 async function erc20Token() {
     const accounts = await ethers.getSigners();
     const contractOwner = accounts[0];
-    const diamondAddress = "0x9F7af917573DB7A510fE54e521CBE779EeFF3d2F";
+    const diamondAddress = "0x658D7591FFC60b008c7Bf24632C1eb2062b7E4A5";
 
     const FacetNames = [
-        {
-            name: "ERC2771Context",
-            address: "0x4C97989Ea3b7f3DC40b64183cCA0E734c08D5DD8",
-        },
-        {
-            name: "ERC2771ContextOwnable",
-            address: "0xbC65911F3b6BeF213685FF68d8095A6135d1C97e",
-        },
+        // {
+        //     name: "ERC2771Context",
+        //     address: "0x4C97989Ea3b7f3DC40b64183cCA0E734c08D5DD8",
+        // },
+        // {
+        //     name: "ERC2771ContextOwnable",
+        //     address: "0xbC65911F3b6BeF213685FF68d8095A6135d1C97e",
+        // },
         {
             name: "Marketplace",
-            address: "0x5aa004567D3fb70DfcDC93c611808032a3C28d7a",
+            address: null,
         },
-        {
-            name: "MarketplaceBaseOwnable",
-            address: "0x0Da76127b3C788759C88878E520e84BB0D87b61b",
-        },
+        // {
+        //     name: "MarketplaceBaseOwnable",
+        //     address: "0x0Da76127b3C788759C88878E520e84BB0D87b61b",
+        // },
     ];
     const cut = [];
     for (const FacetName of FacetNames) {
@@ -44,7 +44,11 @@ async function erc20Token() {
         cut.push({
             facetAddress: facet.address,
             action: FacetCutAction.Add,
-            functionSelectors: getSelectors(facet),
+            functionSelectors: getSelectors(facet).get([
+                "cancelListing(address,uint256)",
+                // "getListingId(address,address,uint256)",
+                // "createListing(address,uint256,uint256,uint256,uint256,uint256)",
+            ]),
         });
     }
     console.log("Cut", cut);

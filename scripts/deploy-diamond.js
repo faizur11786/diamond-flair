@@ -31,7 +31,7 @@ async function deployDiamond() {
     await erc173Facet.deployed();
     console.log("erc173Facet deployed:", erc173Facet.address);
 
-    console.log("sdfsd", {
+    console.log("Facets", {
         diamondCutFacet: diamondCutFacet.address,
         diamondLoupeFacet: diamondLoupeFacet.address,
         erc165Facet: erc165Facet.address,

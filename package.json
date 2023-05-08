@@ -30,6 +30,7 @@
   },
   "dependencies": {
     "@manifoldxyz/royalty-registry-solidity": "^2.0.3",
+    "@moralisweb3/common-evm-utils": "^2.19.0",
     "@nomicfoundation/hardhat-chai-matchers": "^1.0.0",
     "@nomicfoundation/hardhat-network-helpers": "^1.0.0",
     "@nomicfoundation/hardhat-toolbox": "^2.0.2",
@@ -39,8 +40,10 @@
     "@typechain/hardhat": "^6.1.2",
     "@types/chai": "^4.2.0",
     "@types/mocha": ">=9.1.0",
+    "axios": "^1.4.0",
     "erc721a-upgradeable": "^4.2.3",
     "hardhat-gas-reporter": "^1.0.8",
+    "moralis": "^2.19.0",
     "operator-filter-registry": "^1.4.1",
     "solidity-coverage": "^0.8.1",
     "ts-node": ">=8.0.0",

@@ -2,8 +2,8 @@
 
 pragma solidity ^0.8.15;
 
-interface IERC1155ListInternal {
-    event ERC1155ListingAdd(
+interface IListInternal {
+    event ListingAdd(
         uint256 indexed listingId,
         address indexed seller,
         address indexed tokenAddress,
@@ -12,11 +12,19 @@ interface IERC1155ListInternal {
         uint256 priceInUsd,
         uint256 time
     );
-    event UpdateERC1155Listing(
+    event UpdateListing(
         uint256 indexed listingId,
         address indexed tokenAddress,
         uint256 quantity,
         uint256 priceInUsd,
+        uint256 time
+    );
+
+    event CancelListing(
+        address indexed tokenAddress,
+        address indexed owner,
+        uint256 tokeId,
+        uint256 listingId,
         uint256 time
     );
 }

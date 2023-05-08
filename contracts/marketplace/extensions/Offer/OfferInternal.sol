@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {IOfferInternal} from "./interfaces/IOfferInternal.sol";
 import {OfferStorage} from "./storage/OfferStorage.sol";
 import {MarketplaceBaseInternal} from "../../base/MarketplaceBaseInternal.sol";
-import {ERC1155ListStorage} from "../ERC1155List/storage/ERC1155ListStorage.sol";
+import {ListStorage} from "../List/storage/ListStorage.sol";
 
 abstract contract OfferInternal is IOfferInternal, MarketplaceBaseInternal {
     using OfferStorage for OfferStorage.Layout;
@@ -38,12 +38,12 @@ abstract contract OfferInternal is IOfferInternal, MarketplaceBaseInternal {
     //     require(_offerPrice > 0, "price can not 0");
 
     //     if (IERC165(_nft).supportsInterface(INTERFACE_ID_ERC721)) {} else {
-    //         ERC1155ListStorage.Layout storage l = ERC1155ListStorage.layout();
+    //         ListStorage.Layout storage l = ListStorage.layout();
 
-    //         uint256 listingId = l.erc1155TokenToListingId[_nft][_tokenId][
+    //         uint256 listingId = l.TokenToListingId[_nft][_tokenId][
     //             _msgSender()
     //         ];
-    //         ERC1155ListStorage.ERC1155Listing memory nft = l.erc1155Listings[
+    //         ListStorage.Listing memory nft = l.Listings[
     //             listingId
     //         ];
 

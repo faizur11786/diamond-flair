@@ -2,8 +2,8 @@
 
 pragma solidity ^0.8.15;
 
-library ERC1155ListStorage {
-    struct ERC1155Listing {
+library ListStorage {
+    struct Listing {
         uint256 listingId;
         address seller;
         address tokenAddress;
@@ -14,13 +14,16 @@ library ERC1155ListStorage {
         uint256 timeCreated;
         uint256 timeLastPurchased;
         uint256 sourceListingId;
+        uint256 startTime;
+        uint256 endTime;
         bool sold;
         bool cancelled;
+        bool isERC1155;
     }
     struct Layout {
         uint256 nextListingId;
-        mapping(uint256 => ERC1155Listing) erc1155Listings;
-        mapping(address => mapping(uint256 => mapping(address => uint256))) erc1155TokenToListingId;
+        mapping(uint256 => Listing) listings;
+        mapping(address => mapping(uint256 => mapping(address => uint256))) tokenToListingId;
         uint256[] listingIds;
     }
 
