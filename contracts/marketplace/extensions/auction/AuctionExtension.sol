@@ -2,13 +2,12 @@
 
 pragma solidity ^0.8.15;
 
-import "@openzeppelin/contracts/utils/structs/BitMaps.sol";
+import {IAuctionInternal} from "./interfaces/IAuctionInternal.sol";
+import {IAuctionExtension} from "./interfaces/IAuctionExtension.sol";
 
-import "../../base/MarketplaceBaseInternal.sol";
-import "./interfaces/IAuctionInternal.sol";
-import "./interfaces/IAuctionExtension.sol";
-import {AuctionInternal} from "./AuctionInternal.sol";
+import {MarketplaceBaseInternal} from "../../base/MarketplaceBaseInternal.sol";
 import {AuctionStorage} from "./storage/AuctionStorage.sol";
+import {AuctionInternal} from "./AuctionInternal.sol";
 
 abstract contract AuctionExtension is IAuctionExtension, AuctionInternal {
     using AuctionStorage for AuctionStorage.Layout;

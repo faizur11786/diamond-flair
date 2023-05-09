@@ -2,13 +2,12 @@
 
 pragma solidity ^0.8.15;
 
-import "@openzeppelin/contracts/utils/structs/BitMaps.sol";
+import {IListInternal} from "./interfaces/IListInternal.sol";
+import {IListExtension} from "./interfaces/IListExtension.sol";
 
-import "../../base/MarketplaceBaseInternal.sol";
-import "./interfaces/IListInternal.sol";
-import "./interfaces/IListExtension.sol";
-import {ListInternal} from "./ListInternal.sol";
+import {MarketplaceBaseInternal} from "../../base/MarketplaceBaseInternal.sol";
 import {ListStorage} from "./storage/ListStorage.sol";
+import {ListInternal} from "./ListInternal.sol";
 
 abstract contract ListExtension is IListExtension, ListInternal {
     using ListStorage for ListStorage.Layout;
@@ -46,7 +45,7 @@ abstract contract ListExtension is IListExtension, ListInternal {
     {
         bool success = _cancelListing(tokenAddress, tokenId, _msgSender());
         if (!success) {
-            revert("Error");
+            revert ErrCancelListingFailed();
         }
         return success;
     }

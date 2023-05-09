@@ -2,15 +2,16 @@
 
 pragma solidity ^0.8.15;
 
-import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
-import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-
-import "../../../access/ownable/OwnableInternal.sol";
-import "../../base/MarketplaceBaseInternal.sol";
+import {IERC721} from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {IAuctionInternal} from "./interfaces/IAuctionInternal.sol";
 import {ISokosNFT} from "./interfaces/ISokosNFT.sol";
-import {AuctionStorage} from "./storage/AuctionStorage.sol";
+
+import {OwnableInternal} from "../../../access/ownable/OwnableInternal.sol";
 import {MarketplaceBaseInternal} from "../../base/MarketplaceBaseInternal.sol";
+import {AuctionStorage} from "./storage/AuctionStorage.sol";
+
+// import {MarketplaceBaseInternal} from "../../base/MarketplaceBaseInternal.sol";
 
 abstract contract AuctionInternal is
     OwnableInternal,

@@ -3,6 +3,9 @@
 pragma solidity ^0.8.15;
 
 interface IListInternal {
+    error ErrCancelListingFailed();
+    error ErrInvalidNFT();
+
     event ListingAdd(
         uint256 indexed listingId,
         address indexed seller,
