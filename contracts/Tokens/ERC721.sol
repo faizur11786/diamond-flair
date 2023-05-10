@@ -9,8 +9,9 @@ import {ERC721URIStorage, ERC721, Context} from "@openzeppelin/contracts/token/E
 import {ERC721Burnable} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import {ERC721Enumerable} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import {Counters} from "@openzeppelin/contracts/utils/Counters.sol";
-import {ERC2771Context} from "@openzeppelin/contracts/metatx/ERC2771Context.sol";
 import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {AccessControl, Strings} from "@openzeppelin/contracts/access/AccessControl.sol";
+import {ERC2771Context} from "./common/ERC2771Context.sol";
 
 contract SokosERC721 is
     IERC2981,
@@ -18,23 +19,32 @@ contract SokosERC721 is
     ERC721URIStorage,
     ERC721Burnable,
     ERC721Enumerable,
-    Ownable
+    AccessControl
 {
     using Counters for Counters.Counter;
     Counters.Counter private _tokenIds;
 
     bytes4 private constant _INTERFACE_ID_ERC2981 = 0x2a55205a;
+    bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
+    bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
     uint256 private _royaltyPercentage; // Royalty percentage, multiplied by 1000 (e.g. 5000 = 5%)
     address private _royaltyReceiver; // Royalty receiver
 
-    constructor(
-        string memory name,
-        string memory symbol,
-        address royaltyReceiver,
-        address trustedForwarder
-    ) ERC721(name, symbol) ERC2771Context(trustedForwarder) {
-        _royaltyReceiver = royaltyReceiver;
+    modifier only(bytes32 role) {
+        if (!hasRole(role, _msgSender())) {
+            revert(
+                string(
+                    abi.encodePacked(
+                        "AccessControl: account ",
+                        Strings.toHexString(_msgSender()),
+                        " is missing role ",
+                        Strings.toHexString(uint256(role), 32)
+                    )
+                )
+            );
+        }
+        _;
     }
 
     function _msgSender()
@@ -55,7 +65,22 @@ contract SokosERC721 is
         return ERC2771Context._msgData();
     }
 
-    function mint(address owner, string memory uri) external returns (uint256) {
+    constructor(
+        string memory name,
+        string memory symbol,
+        address royaltyReceiver,
+        address trustedForwarder
+    ) ERC721(name, symbol) ERC2771Context(trustedForwarder) {
+        _royaltyReceiver = royaltyReceiver;
+        _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
+        _setupRole(ADMIN_ROLE, _msgSender());
+        _setupRole(MINTER_ROLE, _msgSender());
+    }
+
+    function mint(
+        address owner,
+        string memory uri
+    ) external only(MINTER_ROLE) returns (uint256) {
         _tokenIds.increment();
 
         uint256 newItemId = _tokenIds.current();
@@ -65,20 +90,22 @@ contract SokosERC721 is
         return newItemId;
     }
 
+    function setRoyaltyPercentage(
+        uint256 percentage
+    ) external only(ADMIN_ROLE) {
+        require(
+            percentage <= 10000,
+            "SokosToken: Royalty percentage must be less than or equal to 100%"
+        );
+        _royaltyPercentage = percentage;
+    }
+
     function royaltyInfo(
         uint256 royaltyPercentage,
         uint256 value
     ) external view override returns (address receiver, uint256 royaltyAmount) {
         receiver = _royaltyReceiver;
         royaltyAmount = (value * royaltyPercentage) / 100000; // Calculate royalty as a percentage of sale value
-    }
-
-    function setRoyaltyPercentage(uint256 percentage) external onlyOwner {
-        require(
-            percentage <= 10000,
-            "MyToken: Royalty percentage must be less than or equal to 100%"
-        );
-        _royaltyPercentage = percentage;
     }
 
     function getRoyaltyPercentage() external view returns (uint256) {
@@ -95,7 +122,7 @@ contract SokosERC721 is
         public
         view
         virtual
-        override(ERC721, IERC165, ERC721Enumerable)
+        override(ERC721, IERC165, ERC721Enumerable, AccessControl)
         returns (bool)
     {
         return
@@ -130,7 +157,13 @@ contract SokosERC721 is
         super._beforeTokenTransfer(from, to, tokenId, batchSize);
     }
 
-    function withdrawFunds(address token) external onlyOwner {
+    function setTrustedForwarder(
+        address trustedForwarder
+    ) external only(ADMIN_ROLE) {
+        _trustedForwarder = trustedForwarder;
+    }
+
+    function withdrawFunds(address token) external only(ADMIN_ROLE) {
         require(
             IERC20(token).balanceOf(address(this)) > 0,
             "No funds to withdraw"
@@ -141,7 +174,7 @@ contract SokosERC721 is
         );
     }
 
-    function withdraw() external onlyOwner {
+    function withdraw() external only(ADMIN_ROLE) {
         uint256 balance = address(this).balance;
         payable(_msgSender()).transfer(balance);
     }

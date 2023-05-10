@@ -3,18 +3,11 @@
 pragma solidity ^0.8.15;
 
 library LibPart {
-    bytes32 public constant TYPE_HASH =
-        keccak256("Part(address account,uint104 value)");
-
     struct Part {
         address payable account;
         uint104 value;
     }
-    bytes4 constant _INTERFACE_ID_ROYALTIES = 0xcad96cca;
-
-    function hash(Part memory part) internal pure returns (bytes32) {
-        return keccak256(abi.encode(TYPE_HASH, part.account, part.value));
-    }
+    bytes4 public constant _INTERFACE_ID_ROYALTIES = 0xcad96cca;
 }
 
 interface IRoyaltiesV2 {
