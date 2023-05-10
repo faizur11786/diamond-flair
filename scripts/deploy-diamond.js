@@ -71,6 +71,10 @@ async function deployDiamond() {
             name: "MarketplaceBaseOwnable",
             address: null,
         },
+        {
+            name: "Factory",
+            address: null,
+        },
     ];
     const cut = [];
     for (const FacetName of FacetNames) {
