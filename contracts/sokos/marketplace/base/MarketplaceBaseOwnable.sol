@@ -2,7 +2,7 @@
 
 pragma solidity ^0.8.15;
 
-import {OwnableInternal} from "../../access/ownable/OwnableInternal.sol";
+import {OwnableInternal} from "../../../access/ownable/OwnableInternal.sol";
 
 import {MarketplaceBaseStorage} from "./storage/MarketplaceBaseStorage.sol";
 import {IMarketplaceBaseOwnable} from "./interfaces/IMarketplaceBaseOwnable.sol";

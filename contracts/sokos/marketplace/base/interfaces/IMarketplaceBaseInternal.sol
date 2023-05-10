@@ -2,9 +2,6 @@
 
 pragma solidity ^0.8.15;
 
-/**
- * @title Partial ERC20 interface needed by internal functions
- */
 interface IMarketplaceBaseInternal {
     event BoughtNFT(
         address indexed nft,

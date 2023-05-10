@@ -7,9 +7,6 @@ import "@openzeppelin/contracts/utils/Context.sol";
 import {IMarketplaceBaseInternal} from "./interfaces/IMarketplaceBaseInternal.sol";
 import {MarketplaceBaseStorage} from "./storage/MarketplaceBaseStorage.sol";
 
-/**
- * @title Base Marketplace internal functions, excluding optional extensions
- */
 abstract contract MarketplaceBaseInternal is Context, IMarketplaceBaseInternal {
     using MarketplaceBaseStorage for MarketplaceBaseStorage.Layout;
 
@@ -47,10 +44,4 @@ abstract contract MarketplaceBaseInternal is Context, IMarketplaceBaseInternal {
     ) internal view virtual returns (MarketplaceBaseStorage.TokenFeed memory) {
         return MarketplaceBaseStorage.layout().payableToken[token];
     }
-
-    function _beforeTokenTransfer(
-        address from,
-        address to,
-        uint256 amount
-    ) internal virtual {}
 }

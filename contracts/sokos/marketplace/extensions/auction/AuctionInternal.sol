@@ -7,7 +7,7 @@ import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {IAuctionInternal} from "./interfaces/IAuctionInternal.sol";
 import {ISokosNFT} from "./interfaces/ISokosNFT.sol";
 
-import {OwnableInternal} from "../../../access/ownable/OwnableInternal.sol";
+import {OwnableInternal} from "../../../../access/ownable/OwnableInternal.sol";
 import {MarketplaceBaseInternal} from "../../base/MarketplaceBaseInternal.sol";
 import {AuctionStorage} from "./storage/AuctionStorage.sol";
 

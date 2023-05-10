@@ -2,13 +2,10 @@
 
 pragma solidity ^0.8.15;
 
-import "../../metatx/ERC2771ContextInternal.sol";
+import "../../../metatx/ERC2771ContextInternal.sol";
 
 import "./MarketplaceBase.sol";
 
-/**
- * @title Base ERC721A contract with meta-transactions support (via ERC2771).
- */
 abstract contract MarketplaceBaseERC2771 is
     MarketplaceBase,
     ERC2771ContextInternal

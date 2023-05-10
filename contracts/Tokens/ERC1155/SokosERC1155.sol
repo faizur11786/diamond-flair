@@ -32,11 +32,12 @@ contract SokosERC1155 is
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
     constructor(
+        address owner,
         address trustedForwarder
     ) ERC1155("") ERC2771Context(trustedForwarder) {
-        _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
-        _setupRole(ADMIN_ROLE, _msgSender());
-        _setupRole(MINTER_ROLE, _msgSender());
+        _grantRole(DEFAULT_ADMIN_ROLE, owner);
+        _setupRole(ADMIN_ROLE, owner);
+        _setupRole(MINTER_ROLE, owner);
     }
 
     modifier only(bytes32 role) {
@@ -101,12 +102,6 @@ contract SokosERC1155 is
             );
         }
         return (address(0), 0);
-    }
-
-    function stringToBytes(
-        string memory _string
-    ) public pure returns (bytes memory) {
-        return bytes(_string);
     }
 
     function mint(
@@ -184,6 +179,12 @@ contract SokosERC1155 is
         bytes memory data
     ) internal override(ERC1155, ERC1155Supply) {
         super._beforeTokenTransfer(operator, from, to, ids, amounts, data);
+    }
+
+    function setTrustedForwarder(
+        address trustedForwarder
+    ) external only(ADMIN_ROLE) {
+        _trustedForwarder = trustedForwarder;
     }
 
     function supportsInterface(

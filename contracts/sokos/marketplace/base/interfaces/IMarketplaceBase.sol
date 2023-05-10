@@ -6,9 +6,6 @@ import {IMarketplaceBaseInternal} from "./IMarketplaceBaseInternal.sol";
 import {IMarketplaceBaseOwnable} from "./IMarketplaceBaseOwnable.sol";
 import {MarketplaceBaseStorage} from "../storage/MarketplaceBaseStorage.sol";
 
-/**
- * @dev see https://github.com/ethereum/EIPs/issues/20
- */
 interface IMarketplaceBase is IMarketplaceBaseInternal {
     function fee() external view returns (uint104);
 

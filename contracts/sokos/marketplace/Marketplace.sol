@@ -39,15 +39,4 @@ contract Marketplace is
     {
         return MarketplaceBaseERC2771._msgData();
     }
-
-    /**
-     * @dev See {ERC20-_beforeTokenTransfer}.
-     */
-    function _beforeTokenTransfer(
-        address from,
-        address to,
-        uint256 amount
-    ) internal virtual override(MarketplaceBaseInternal) {
-        MarketplaceBaseInternal._beforeTokenTransfer(from, to, amount);
-    }
 }

@@ -31,6 +31,21 @@ contract SokosERC721 is
     uint256 private _royaltyPercentage; // Royalty percentage, multiplied by 1000 (e.g. 5000 = 5%)
     address private _royaltyReceiver; // Royalty receiver
 
+    constructor(
+        string memory name,
+        string memory symbol,
+        address royaltyReceiver,
+        uint256 royaltyPercentage,
+        address owner,
+        address trustedForwarder
+    ) ERC721(name, symbol) ERC2771Context(trustedForwarder) {
+        _royaltyReceiver = royaltyReceiver;
+        _royaltyPercentage = royaltyPercentage;
+        _grantRole(DEFAULT_ADMIN_ROLE, owner);
+        _setupRole(ADMIN_ROLE, owner);
+        _setupRole(MINTER_ROLE, owner);
+    }
+
     modifier only(bytes32 role) {
         if (!hasRole(role, _msgSender())) {
             revert(
@@ -63,18 +78,6 @@ contract SokosERC721 is
         returns (bytes calldata)
     {
         return ERC2771Context._msgData();
-    }
-
-    constructor(
-        string memory name,
-        string memory symbol,
-        address royaltyReceiver,
-        address trustedForwarder
-    ) ERC721(name, symbol) ERC2771Context(trustedForwarder) {
-        _royaltyReceiver = royaltyReceiver;
-        _grantRole(DEFAULT_ADMIN_ROLE, _msgSender());
-        _setupRole(ADMIN_ROLE, _msgSender());
-        _setupRole(MINTER_ROLE, _msgSender());
     }
 
     function mint(
