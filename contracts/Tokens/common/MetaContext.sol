@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: MIT
-// OpenZeppelin Contracts (last updated v4.7.0) (metatx/ERC2771Context.sol)
+// OpenZeppelin Contracts (last updated v4.7.0) (metatx/MetaContext.sol)
 
 pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/utils/Context.sol";
 
 /**
- * @dev Context variant with ERC2771 support.
+ * @dev Context variant with Meta support.
  */
-abstract contract ERC2771Context is Context {
+abstract contract MetaContext is Context {
     /// @custom:oz-upgrades-unsafe-allow state-variable-immutable
     address internal _trustedForwarder;
 

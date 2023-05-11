@@ -6,7 +6,7 @@ const { getSelectors, FacetCutAction } = require("../libraries/diamond.js");
 async function erc20Token() {
     const accounts = await ethers.getSigners();
     const contractOwner = accounts[0];
-    const diamondAddress = "0x658D7591FFC60b008c7Bf24632C1eb2062b7E4A5";
+    const diamondAddress = "0x3FB54D69304FE2EB04F8da930DC992ac2697Bea7";
 
     const FacetNames = [
         // {
@@ -17,8 +17,12 @@ async function erc20Token() {
         //     name: "ERC2771ContextOwnable",
         //     address: "0xbC65911F3b6BeF213685FF68d8095A6135d1C97e",
         // },
+        // {
+        //     name: "Marketplace",
+        //     address: null,
+        // },
         {
-            name: "Marketplace",
+            name: "Factory",
             address: null,
         },
         // {
@@ -44,11 +48,12 @@ async function erc20Token() {
         cut.push({
             facetAddress: facet.address,
             action: FacetCutAction.Add,
-            functionSelectors: getSelectors(facet).get([
-                "cancelListing(address,uint256)",
-                // "getListingId(address,address,uint256)",
-                // "createListing(address,uint256,uint256,uint256,uint256,uint256)",
-            ]),
+            functionSelectors: getSelectors(facet),
+            //.get([
+            // "cancelListing(address,uint256)",
+            // "getListingId(address,address,uint256)",
+            // "createListing(address,uint256,uint256,uint256,uint256,uint256)",
+            //  ]),
         });
     }
     console.log("Cut", cut);

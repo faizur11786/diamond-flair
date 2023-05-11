@@ -8,15 +8,14 @@ import {IERC1155MetadataURI} from "@openzeppelin/contracts/token/ERC1155/extensi
 import {ERC1155, ERC1155URIStorage, Context, IERC165} from "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155URIStorage.sol";
 import {ERC1155Burnable} from "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
 import {ERC1155Supply} from "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";
-import {ERC2771Context} from "../common/ERC2771Context.sol";
-import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
+import {MetaContext} from "../common/MetaContext.sol";
 import {RoyaltiesV2Impl, LibPart} from "./RoyaltiesV2/RoyaltiesV2.sol";
 import {Counters} from "@openzeppelin/contracts/utils/Counters.sol";
 import {AccessControl, Strings} from "@openzeppelin/contracts/access/AccessControl.sol";
 
 contract SokosERC1155 is
     IERC1155MetadataURI,
-    ERC2771Context,
+    MetaContext,
     ERC1155URIStorage,
     ERC1155Burnable,
     ERC1155Supply,
@@ -34,7 +33,7 @@ contract SokosERC1155 is
     constructor(
         address owner,
         address trustedForwarder
-    ) ERC1155("") ERC2771Context(trustedForwarder) {
+    ) ERC1155("") MetaContext(trustedForwarder) {
         _grantRole(DEFAULT_ADMIN_ROLE, owner);
         _setupRole(ADMIN_ROLE, owner);
         _setupRole(MINTER_ROLE, owner);
@@ -59,19 +58,19 @@ contract SokosERC1155 is
     function _msgSender()
         internal
         view
-        override(Context, ERC2771Context)
+        override(Context, MetaContext)
         returns (address sender)
     {
-        return ERC2771Context._msgSender();
+        return MetaContext._msgSender();
     }
 
     function _msgData()
         internal
         view
-        override(Context, ERC2771Context)
+        override(Context, MetaContext)
         returns (bytes calldata)
     {
-        return ERC2771Context._msgData();
+        return MetaContext._msgData();
     }
 
     function setRoyalties(

@@ -40,6 +40,7 @@ abstract contract FactoryInternal is Context, IFactoryInternal {
     function _createERC721Collection(
         string memory _name,
         string memory _symbol,
+        string memory _uri,
         address _royaltyReceiver,
         uint256 _royaltyPercentage,
         address _owner,
@@ -53,7 +54,7 @@ abstract contract FactoryInternal is Context, IFactoryInternal {
             _owner,
             _trustedForwarder
         );
-        _addCollection(_name, _symbol, string(""), address(token), false);
+        _addCollection(_name, _symbol, _uri, address(token), false);
         return true;
     }
 

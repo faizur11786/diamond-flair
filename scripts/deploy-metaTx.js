@@ -6,7 +6,7 @@ const { getSelectors, FacetCutAction } = require("./libraries/diamond.js");
 async function deployDiamond() {
     const accounts = await ethers.getSigners();
     const contractOwner = accounts[0];
-    const diamondAddress = "0xC68370956A07471882290ad82281C3e6E3014532";
+    const diamondAddress = "0x3FB54D69304FE2EB04F8da930DC992ac2697Bea7";
 
     const FacetNames = [
         {

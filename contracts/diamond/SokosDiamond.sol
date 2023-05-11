@@ -4,7 +4,7 @@ pragma solidity ^0.8.15;
 
 import "../access/ownable/OwnableStorage.sol";
 import "../access/ownable/IERC173.sol";
-import "../introspection/ERC165.sol";
+import "../introspection/ERC165Facet.sol";
 import "../metatx/ERC2771Context.sol";
 import "./interfaces/IDiamondCut.sol";
 import "./interfaces/IDiamondLoupe.sol";

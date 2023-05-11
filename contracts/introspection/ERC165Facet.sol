@@ -14,7 +14,7 @@ import "./ERC165Storage.sol";
  * @custom:category Introspection
  * @custom:provides-interfaces IERC165
  */
-contract ERC165 is IERC165 {
+contract ERC165Facet is IERC165 {
     using ERC165Storage for ERC165Storage.Layout;
 
     /**

@@ -13,7 +13,7 @@ import "./OwnableInternal.sol";
  * @custom:category Access
  * @custom:provides-interfaces IERC173
  */
-contract Ownable is IERC173, OwnableInternal {
+contract OwnableFacet is IERC173, OwnableInternal {
     /**
      * @inheritdoc IERC173
      */

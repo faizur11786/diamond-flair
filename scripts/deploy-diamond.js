@@ -20,13 +20,13 @@ async function deployDiamond() {
     console.log("diamondLoupeFacet deployed:", diamondLoupeFacet.address);
 
     // deploy ERC165
-    const ERC165 = await ethers.getContractFactory("ERC165");
+    const ERC165 = await ethers.getContractFactory("ERC165Facet");
     const erc165Facet = await ERC165.deploy();
     await erc165Facet.deployed();
     console.log("erc165Facet deployed:", erc165Facet.address);
 
     // deploy Ownable
-    const Ownable = await ethers.getContractFactory("Ownable");
+    const Ownable = await ethers.getContractFactory("OwnableFacet");
     const erc173Facet = await Ownable.deploy();
     await erc173Facet.deployed();
     console.log("erc173Facet deployed:", erc173Facet.address);

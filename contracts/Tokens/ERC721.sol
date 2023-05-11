@@ -9,13 +9,12 @@ import {ERC721URIStorage, ERC721, Context} from "@openzeppelin/contracts/token/E
 import {ERC721Burnable} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import {ERC721Enumerable} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import {Counters} from "@openzeppelin/contracts/utils/Counters.sol";
-import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {AccessControl, Strings} from "@openzeppelin/contracts/access/AccessControl.sol";
-import {ERC2771Context} from "./common/ERC2771Context.sol";
+import {MetaContext} from "./common/MetaContext.sol";
 
 contract SokosERC721 is
     IERC2981,
-    ERC2771Context,
+    MetaContext,
     ERC721URIStorage,
     ERC721Burnable,
     ERC721Enumerable,
@@ -38,7 +37,7 @@ contract SokosERC721 is
         uint256 royaltyPercentage,
         address owner,
         address trustedForwarder
-    ) ERC721(name, symbol) ERC2771Context(trustedForwarder) {
+    ) ERC721(name, symbol) MetaContext(trustedForwarder) {
         _royaltyReceiver = royaltyReceiver;
         _royaltyPercentage = royaltyPercentage;
         _grantRole(DEFAULT_ADMIN_ROLE, owner);
@@ -65,19 +64,19 @@ contract SokosERC721 is
     function _msgSender()
         internal
         view
-        override(Context, ERC2771Context)
+        override(Context, MetaContext)
         returns (address sender)
     {
-        return ERC2771Context._msgSender();
+        return MetaContext._msgSender();
     }
 
     function _msgData()
         internal
         view
-        override(Context, ERC2771Context)
+        override(Context, MetaContext)
         returns (bytes calldata)
     {
-        return ERC2771Context._msgData();
+        return MetaContext._msgData();
     }
 
     function mint(
