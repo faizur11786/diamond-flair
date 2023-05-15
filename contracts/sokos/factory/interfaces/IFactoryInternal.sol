@@ -10,4 +10,5 @@ interface IFactoryInternal {
         string symbol,
         bool isERC1155
     );
+    event CollectionDeployed(address indexed tokenAddress);
 }
