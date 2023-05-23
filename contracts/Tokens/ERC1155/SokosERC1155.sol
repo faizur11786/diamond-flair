@@ -30,13 +30,21 @@ contract SokosERC1155 is
     bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
+    string public contractUri;
+    string public name;
+    string public symbol;
+
     constructor(
+        string memory tokenName,
+        string memory tokenSymbol,
         address owner,
         address trustedForwarder
     ) ERC1155("") MetaContext(trustedForwarder) {
         _grantRole(DEFAULT_ADMIN_ROLE, owner);
         _setupRole(ADMIN_ROLE, owner);
         _setupRole(MINTER_ROLE, owner);
+        name = tokenName;
+        symbol = tokenSymbol;
     }
 
     modifier only(bytes32 role) {
@@ -71,6 +79,18 @@ contract SokosERC1155 is
         returns (bytes calldata)
     {
         return MetaContext._msgData();
+    }
+
+    function setName(string memory _name) external only(ADMIN_ROLE) {
+        name = _name;
+    }
+
+    function setSymbol(string memory _symbol) external only(ADMIN_ROLE) {
+        symbol = _symbol;
+    }
+
+    function setContractURI(string memory _uri) external only(ADMIN_ROLE) {
+        contractUri = _uri;
     }
 
     function setRoyalties(

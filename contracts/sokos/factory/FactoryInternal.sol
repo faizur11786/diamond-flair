@@ -32,7 +32,12 @@ abstract contract FactoryInternal is Context, IFactoryInternal {
         address _owner,
         address _trustedForwarder
     ) internal returns (bool) {
-        SokosERC1155 token = new SokosERC1155(_owner, _trustedForwarder);
+        SokosERC1155 token = new SokosERC1155(
+            _name,
+            _symbol,
+            _owner,
+            _trustedForwarder
+        );
         _addCollection(_name, _symbol, _uri, address(token), true);
         emit CollectionDeployed(address(token));
         return true;

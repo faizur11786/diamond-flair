@@ -29,6 +29,7 @@ contract SokosERC721 is
 
     uint256 private _royaltyPercentage; // Royalty percentage, multiplied by 1000 (e.g. 5000 = 5%)
     address private _royaltyReceiver; // Royalty receiver
+    string public contractUri;
 
     constructor(
         string memory name,
@@ -77,6 +78,10 @@ contract SokosERC721 is
         returns (bytes calldata)
     {
         return MetaContext._msgData();
+    }
+
+    function setContractURI(string memory _uri) external only(ADMIN_ROLE) {
+        contractUri = _uri;
     }
 
     function mint(
