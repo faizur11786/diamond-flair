@@ -2,15 +2,15 @@
 
 pragma solidity ^0.8.15;
 
-import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {IERC2981, IERC165} from "@openzeppelin/contracts/interfaces/IERC2981.sol";
+import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import { IERC2981, IERC165 } from "@openzeppelin/contracts/interfaces/IERC2981.sol";
 
-import {ERC721URIStorage, ERC721, Context} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-import {ERC721Burnable} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
-import {ERC721Enumerable} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
-import {Counters} from "@openzeppelin/contracts/utils/Counters.sol";
-import {AccessControl, Strings} from "@openzeppelin/contracts/access/AccessControl.sol";
-import {MetaContext} from "./common/MetaContext.sol";
+import { ERC721URIStorage, ERC721, Context } from "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import { ERC721Burnable } from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
+import { ERC721Enumerable } from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+import { Counters } from "@openzeppelin/contracts/utils/Counters.sol";
+import { AccessControl, Strings } from "@openzeppelin/contracts/access/AccessControl.sol";
+import { MetaContext } from "./common/MetaContext.sol";
 
 contract SokosERC721 is
     IERC2981,
@@ -129,7 +129,7 @@ contract SokosERC721 is
         public
         view
         virtual
-        override(ERC721, IERC165, ERC721Enumerable, AccessControl)
+        override(ERC721, IERC165, ERC721Enumerable, AccessControl, ERC721URIStorage)
         returns (bool)
     {
         return
