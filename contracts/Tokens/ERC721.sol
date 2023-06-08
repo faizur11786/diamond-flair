@@ -21,7 +21,7 @@ contract SokosERC721 is
     AccessControl
 {
     using Counters for Counters.Counter;
-    Counters.Counter private _tokenIds;
+    Counters.Counter public tokenCounter;
 
     bytes4 private constant _INTERFACE_ID_ERC2981 = 0x2a55205a;
     bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
@@ -88,23 +88,25 @@ contract SokosERC721 is
         address owner,
         string memory uri
     ) external only(MINTER_ROLE) returns (uint256) {
-        _tokenIds.increment();
+        tokenCounter.increment();
 
-        uint256 newItemId = _tokenIds.current();
+        uint256 newItemId = tokenCounter.current();
         _safeMint(owner, newItemId);
         _setTokenURI(newItemId, uri);
 
         return newItemId;
     }
 
-    function setRoyaltyPercentage(
-        uint256 percentage
+    function setRoyalties(
+         address payable royaltyReceiver,
+        uint104 royaltyPercentage
     ) external only(ADMIN_ROLE) {
         require(
-            percentage <= 10000,
+            royaltyPercentage <= 10000,
             "SokosToken: Royalty percentage must be less than or equal to 100%"
         );
-        _royaltyPercentage = percentage;
+        _royaltyPercentage = royaltyPercentage;
+        _royaltyReceiver = royaltyReceiver;
     }
 
     function royaltyInfo(

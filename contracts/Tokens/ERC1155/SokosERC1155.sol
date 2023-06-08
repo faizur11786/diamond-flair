@@ -103,21 +103,20 @@ contract SokosERC1155 is
             royaltyPercentage < 10000,
             "Royalty percentage must be less than or equal to 100%"
         );
-        LibPart.Part[] memory _royalties = new LibPart.Part[](1);
-        _royalties[0].value = royaltyPercentage;
-        _royalties[0].account = royaltyReceiver;
-        _saveRoyalties(tokenId, _royalties);
+        LibPart.Part memory royalty  = LibPart.Part({value:royaltyPercentage, account:royaltyReceiver});
+        royalties[tokenId] = royalty;
+        _onRoyaltiesSet(tokenId, royalty);
     }
 
     function royaltyInfo(
         uint256 tokenId,
         uint256 salePrice
     ) external view returns (address receiver, uint256 royaltyAmount) {
-        LibPart.Part[] memory _royalties = royalties[tokenId];
-        if (_royalties.length > 0) {
+         LibPart.Part memory _royalties = royalties[tokenId];
+        if (_royalties.account != address(0)) {
             return (
-                _royalties[0].account,
-                (salePrice * _royalties[0].value) / 10000
+                _royalties.account,
+                (salePrice * _royalties.value) / 10000
             );
         }
         return (address(0), 0);
