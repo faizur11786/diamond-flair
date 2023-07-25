@@ -7,8 +7,8 @@ import {IFactoryInternal} from "./interfaces/IFactoryInternal.sol";
 
 import {FactoryStorage} from "./storage/FactoryStorage.sol";
 
-import {SokosERC721} from "../../Tokens/ERC721.sol";
-import {SokosERC1155} from "../../Tokens/ERC1155/SokosERC1155.sol";
+import {SokosERC721} from "../../Tokens/SokosERC721.sol";
+import {SokosERC1155} from "../../Tokens/SokosERC1155.sol";
 
 /**
  * @title Factory internal functions, excluding optional extensions
@@ -47,16 +47,12 @@ abstract contract FactoryInternal is Context, IFactoryInternal {
         string memory _name,
         string memory _symbol,
         string memory _uri,
-        address _royaltyReceiver,
-        uint256 _royaltyPercentage,
         address _owner,
         address _trustedForwarder
     ) internal returns (bool) {
         SokosERC721 token = new SokosERC721(
             _name,
             _symbol,
-            _royaltyReceiver,
-            _royaltyPercentage,
             _owner,
             _trustedForwarder
         );

@@ -16,21 +16,13 @@ abstract contract ListExtension is IListExtension, ListInternal {
         address tokenAddress,
         uint256 tokenId,
         uint256 quantity,
-        uint256 priceInUsd,
-        uint256 startTime,
-        uint256 endTime
+        uint256 priceInUsd
     ) external virtual {
-        require(
-            startTime < endTime && startTime >= block.timestamp,
-            "INVALID_TIME"
-        );
         _createListing(
             tokenAddress,
             tokenId,
             quantity,
-            priceInUsd,
-            startTime,
-            endTime
+            priceInUsd
         );
     }
 

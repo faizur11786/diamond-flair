@@ -17,7 +17,7 @@ library MarketplaceBaseStorage {
     }
 
     bytes32 internal constant STORAGE_SLOT =
-        keccak256("SOKOS.contracts.storage.MarketplaceBase");
+        keccak256("SOKOS.contracts.storage.marketplace-base");
 
     function layout() internal pure returns (Layout storage l) {
         bytes32 slot = STORAGE_SLOT;

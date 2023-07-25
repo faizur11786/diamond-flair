@@ -11,6 +11,7 @@ import { ERC721Enumerable } from "@openzeppelin/contracts/token/ERC721/extension
 import { Counters } from "@openzeppelin/contracts/utils/Counters.sol";
 import { AccessControl, Strings } from "@openzeppelin/contracts/access/AccessControl.sol";
 import { MetaContext } from "./common/MetaContext.sol";
+import { RoyaltiesV2Impl, LibPart } from "./common/RoyaltiesV2.sol";
 
 contract SokosERC721 is
     IERC2981,
@@ -18,6 +19,7 @@ contract SokosERC721 is
     ERC721URIStorage,
     ERC721Burnable,
     ERC721Enumerable,
+    RoyaltiesV2Impl,
     AccessControl
 {
     using Counters for Counters.Counter;
@@ -27,20 +29,16 @@ contract SokosERC721 is
     bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
-    uint256 private _royaltyPercentage; // Royalty percentage, multiplied by 1000 (e.g. 5000 = 5%)
-    address private _royaltyReceiver; // Royalty receiver
     string public contractUri;
+
+    event MintBatch(address[] indexed tos, uint256[] ids);
 
     constructor(
         string memory name,
         string memory symbol,
-        address royaltyReceiver,
-        uint256 royaltyPercentage,
         address owner,
         address trustedForwarder
     ) ERC721(name, symbol) MetaContext(trustedForwarder) {
-        _royaltyReceiver = royaltyReceiver;
-        _royaltyPercentage = royaltyPercentage;
         _grantRole(DEFAULT_ADMIN_ROLE, owner);
         _setupRole(ADMIN_ROLE, owner);
         _setupRole(MINTER_ROLE, owner);
@@ -85,44 +83,76 @@ contract SokosERC721 is
     }
 
     function mint(
-        address owner,
-        string memory uri
-    ) external only(MINTER_ROLE) returns (uint256) {
+        address to,
+        string memory uri,
+        uint104 royaltyPercentage,
+        address payable royaltyReceiver
+    ) public only(MINTER_ROLE) returns (uint256) {
         tokenCounter.increment();
-
         uint256 newItemId = tokenCounter.current();
-        _safeMint(owner, newItemId);
+        _safeMint(to, newItemId);
         _setTokenURI(newItemId, uri);
 
+        if (royaltyReceiver != address(0) && royaltyPercentage > 0) {
+            LibPart.Part memory royalty = LibPart.Part({
+                value: royaltyPercentage,
+                account: royaltyReceiver
+            });
+            royalties[newItemId] = royalty;
+            _onRoyaltiesSet(newItemId, royalty);
+        }
         return newItemId;
     }
 
-    function setRoyalties(
-         address payable royaltyReceiver,
-        uint104 royaltyPercentage
-    ) external only(ADMIN_ROLE) {
+    function mintBatch(
+        address[] memory tos,
+        string[] memory uris,
+        uint104[] memory royaltyPercentages,
+        address[] memory royaltyReceivers
+    ) public only(MINTER_ROLE) {
         require(
-            royaltyPercentage <= 10000,
-            "SokosToken: Royalty percentage must be less than or equal to 100%"
+            tos.length == uris.length &&
+                royaltyPercentages.length == royaltyReceivers.length,
+            "Invalid length"
         );
-        _royaltyPercentage = royaltyPercentage;
-        _royaltyReceiver = royaltyReceiver;
+        uint256[] memory ids = new uint256[](tos.length);
+        for (uint i = 0; i < tos.length; i++) {
+            address to = tos[i];
+            string memory uri = uris[i];
+            uint104 royaltyPercentage = royaltyPercentages[i];
+            address royaltyReceiver = royaltyReceivers[i];
+            ids[i] = mint(to, uri, royaltyPercentage, payable(royaltyReceiver));
+        }
+        emit MintBatch(tos, ids);
+    }
+
+    function setRoyalties(
+        uint256 tokenId,
+        address payable royaltyReceiver,
+        uint104 royaltyPercentage
+    ) public only(ADMIN_ROLE) {
+        require(
+            royaltyPercentage < 10000,
+            "Royalty percentage must be less than or equal to 100%"
+        );
+        require(_exists(tokenId), "nonexistent token");
+        LibPart.Part memory royalty = LibPart.Part({
+            value: royaltyPercentage,
+            account: royaltyReceiver
+        });
+        royalties[tokenId] = royalty;
+        _onRoyaltiesSet(tokenId, royalty);
     }
 
     function royaltyInfo(
-        uint256 royaltyPercentage,
-        uint256 value
-    ) external view override returns (address receiver, uint256 royaltyAmount) {
-        receiver = _royaltyReceiver;
-        royaltyAmount = (value * royaltyPercentage) / 100000; // Calculate royalty as a percentage of sale value
-    }
-
-    function getRoyaltyPercentage() external view returns (uint256) {
-        return _royaltyPercentage;
-    }
-
-    function getRoyaltyReceiver() public view returns (address) {
-        return _royaltyReceiver;
+        uint256 tokenId,
+        uint256 salePrice
+    ) external view returns (address receiver, uint256 royaltyAmount) {
+        LibPart.Part memory _royalties = royalties[tokenId];
+        if (_royalties.account != address(0)) {
+            return (_royalties.account, (salePrice * _royalties.value) / 10000);
+        }
+        return (address(0), 0);
     }
 
     function supportsInterface(
@@ -131,7 +161,13 @@ contract SokosERC721 is
         public
         view
         virtual
-        override(ERC721, IERC165, ERC721Enumerable, AccessControl, ERC721URIStorage)
+        override(
+            ERC721,
+            IERC165,
+            ERC721Enumerable,
+            AccessControl,
+            ERC721URIStorage
+        )
         returns (bool)
     {
         return

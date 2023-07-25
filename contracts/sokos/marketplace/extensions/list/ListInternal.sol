@@ -64,9 +64,7 @@ abstract contract ListInternal is
         address _tokenAddress,
         uint256 _tokenId,
         uint256 _quantity,
-        uint256 _priceInUsd,
-        uint256 _startTime,
-        uint256 _endTime
+        uint256 _priceInUsd
     ) internal {
         IERC1155 erc1155Token;
         IERC721 erc721Token;
@@ -120,8 +118,6 @@ abstract contract ListInternal is
                 timeCreated: block.timestamp,
                 timeLastPurchased: 0,
                 sourceListingId: 0,
-                startTime: _startTime,
-                endTime: _endTime,
                 sold: false,
                 cancelled: false,
                 isERC1155: isERC1155
@@ -140,8 +136,6 @@ abstract contract ListInternal is
             ListStorage.Listing storage listing = l.listings[listingId];
             listing.quantity = _quantity;
             listing.priceInUsd = _priceInUsd;
-            listing.startTime = _startTime;
-            listing.endTime = _endTime;
             listing.cancelled = false;
             listing.sold = false;
             l.listingIds.push(listingId);

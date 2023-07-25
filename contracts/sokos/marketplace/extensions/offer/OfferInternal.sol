@@ -8,7 +8,7 @@ import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import {IOfferInternal} from "./interfaces/IOfferInternal.sol";
 import {OfferStorage} from "./storage/OfferStorage.sol";
 import {MarketplaceBaseInternal} from "../../base/MarketplaceBaseInternal.sol";
-import {ListStorage} from "../List/storage/ListStorage.sol";
+import {ListStorage} from "../list/storage/ListStorage.sol";
 
 abstract contract OfferInternal is IOfferInternal, MarketplaceBaseInternal {
     using OfferStorage for OfferStorage.Layout;

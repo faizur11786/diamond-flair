@@ -8,8 +8,8 @@ import {IERC1155MetadataURI} from "@openzeppelin/contracts/token/ERC1155/extensi
 import {ERC1155, ERC1155URIStorage, Context, IERC165} from "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155URIStorage.sol";
 import {ERC1155Burnable} from "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
 import {ERC1155Supply} from "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";
-import {MetaContext} from "../common/MetaContext.sol";
-import {RoyaltiesV2Impl, LibPart} from "./RoyaltiesV2/RoyaltiesV2.sol";
+import {MetaContext} from "./common/MetaContext.sol";
+import {RoyaltiesV2Impl, LibPart} from "./common/RoyaltiesV2.sol";
 import {Counters} from "@openzeppelin/contracts/utils/Counters.sol";
 import {AccessControl, Strings} from "@openzeppelin/contracts/access/AccessControl.sol";
 
@@ -103,7 +103,10 @@ contract SokosERC1155 is
             royaltyPercentage < 10000,
             "Royalty percentage must be less than or equal to 100%"
         );
-        LibPart.Part memory royalty  = LibPart.Part({value:royaltyPercentage, account:royaltyReceiver});
+        LibPart.Part memory royalty = LibPart.Part({
+            value: royaltyPercentage,
+            account: royaltyReceiver
+        });
         royalties[tokenId] = royalty;
         _onRoyaltiesSet(tokenId, royalty);
     }
@@ -112,12 +115,9 @@ contract SokosERC1155 is
         uint256 tokenId,
         uint256 salePrice
     ) external view returns (address receiver, uint256 royaltyAmount) {
-         LibPart.Part memory _royalties = royalties[tokenId];
+        LibPart.Part memory _royalties = royalties[tokenId];
         if (_royalties.account != address(0)) {
-            return (
-                _royalties.account,
-                (salePrice * _royalties.value) / 10000
-            );
+            return (_royalties.account, (salePrice * _royalties.value) / 10000);
         }
         return (address(0), 0);
     }
@@ -133,8 +133,14 @@ contract SokosERC1155 is
         tokenCounter.increment();
         _mint(to, _id, amount, tokenURI);
         _setURI(_id, string(tokenURI));
-        if (royaltyPercentage > 0) {
-            setRoyalties(_id, royaltyReceiver, royaltyPercentage);
+
+        if (royaltyReceiver != address(0) && royaltyPercentage > 0) {
+            LibPart.Part memory royalty = LibPart.Part({
+                value: royaltyPercentage,
+                account: royaltyReceiver
+            });
+            royalties[_id] = royalty;
+            _onRoyaltiesSet(_id, royalty);
         }
     }
 

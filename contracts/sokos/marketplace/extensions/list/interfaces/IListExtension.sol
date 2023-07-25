@@ -9,9 +9,7 @@ interface IListExtension {
         address tokenAddress,
         uint256 tokenId,
         uint256 quantity,
-        uint256 priceInUsd,
-        uint256 startTime,
-        uint256 endTime
+        uint256 priceInUsd
     ) external;
 
     function cancelListing(

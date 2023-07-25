@@ -14,8 +14,6 @@ library ListStorage {
         uint256 timeCreated;
         uint256 timeLastPurchased;
         uint256 sourceListingId;
-        uint256 startTime;
-        uint256 endTime;
         bool sold;
         bool cancelled;
         bool isERC1155;

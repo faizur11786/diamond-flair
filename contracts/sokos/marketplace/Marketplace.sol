@@ -4,7 +4,7 @@ pragma solidity ^0.8.15;
 
 import "./base/MarketplaceBaseERC2771.sol";
 import {AuctionExtension} from "./extensions/auction/AuctionExtension.sol";
-import {ListExtension} from "./extensions/List/ListExtension.sol";
+import {ListExtension} from "./extensions/list/ListExtension.sol";
 import {MarketplaceBaseInternal} from "./base/MarketplaceBaseInternal.sol";
 
 /**

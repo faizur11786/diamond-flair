@@ -6,29 +6,29 @@ const { getSelectors, FacetCutAction } = require("../libraries/diamond.js");
 async function erc20Token() {
     const accounts = await ethers.getSigners();
     const contractOwner = accounts[0];
-    const diamondAddress = "0x1Ca513adea10d8bfA7e6eBe07b8e259e81Ad095d";
+    const diamondAddress = "0x7c09B35f3498C529e12f4C4a86C89bDffA873ee1";
 
     const FacetNames = [
         // {
         //     name: "ERC2771Context",
-        //     address: "0x3E0A467A4F8AfBe508b9d674A7d2204698C316f1",
+        //     address: "0x66Bae5FA07dF82F3fAaae200001D8D53bf165E37",
         // },
         // {
         //     name: "ERC2771ContextOwnable",
-        //     address: "0xFD2C3204fca9B59119c18AEaAa9d0dc3e2B6a9D0",
+        //     address: "0x9E0eECe3FE00dD5620360C50b8e359aC8B090881",
         // },
         // {
         //     name: "MarketplaceBaseOwnable",
-        //     address: "0x5580b328a9e3cEf94d87234CD65934c256A0E1F5",
+        //     address: "0x19a01fFbb9C6B2358E9a9b1E5938174bd5e7E267",
+        // },
+        // {
+        //     name: "Marketplace",
+        //     address: "0xDF6ba301cefD18a28033F96BBD801Da69C36C636",
         // },
         {
-            name: "Marketplace",
+            name: "Factory",
             address: null,
         },
-        // {
-        //     name: "Factory",
-        //     address: null,
-        // },
     ];
     const cut = [];
     for (const FacetName of FacetNames) {
@@ -49,9 +49,11 @@ async function erc20Token() {
             facetAddress: facet.address,
             action: FacetCutAction.Add,
             functionSelectors: getSelectors(facet).get([
+                "createERC721Collection(string,string,string,address)",
+                // "createERC1155Collection(string,string,string,address)",
                 // "cancelListing(address,uint256)",
                 // "getListingId(address,address,uint256)",
-                "createListing(address,uint256,uint256,uint256,uint256,uint256)",
+                // "createListing(address,uint256,uint256,uint256,uint256,uint256)",
             ]),
         });
     }
