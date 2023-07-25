@@ -32,12 +32,12 @@ module.exports = {
     },
     networks: {
         mumbai: {
-            url: "https://nd-462-884-459.p2pify.com/70eaca77551eac07163154a14c5e9432",
+            url: "https://rpc.mumbai.polygon.gateway.fm/",
             accounts: [`${process.env.PRIV_KEY}`, `${process.env.PRIV_KEY}`],
             chainId: 80001,
         },
         mumbaiOwner: {
-            url: "https://nd-462-884-459.p2pify.com/70eaca77551eac07163154a14c5e9432",
+            url: "https://rpc.mumbai.polygon.gateway.fm/",
             accounts: [`${process.env.PRIV_KEY}`],
             chainId: 80001,
         },

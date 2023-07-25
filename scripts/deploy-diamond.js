@@ -57,11 +57,11 @@ async function deployDiamond() {
     const FacetNames = [
         {
             name: "ERC2771Context",
-            address: null,
+            address: "0x3E0A467A4F8AfBe508b9d674A7d2204698C316f1",
         },
         {
             name: "ERC2771ContextOwnable",
-            address: null,
+            address: "0xFD2C3204fca9B59119c18AEaAa9d0dc3e2B6a9D0",
         },
         {
             name: "Marketplace",

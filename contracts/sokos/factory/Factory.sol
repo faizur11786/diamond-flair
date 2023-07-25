@@ -27,25 +27,25 @@ contract Factory is FactoryInternal, OwnableInternal {
         _createERC1155Collection(name, symbol, uri, _owner(), trustedForwarder);
     }
 
-    function createERC721Collection(
-        string memory name,
-        string memory symbol,
-        string memory uri,
-        address royaltyReceiver,
-        uint256 royaltyPercentage,
-        address trustedForwarder
-    ) external onlyOwner {
-        require(!_isCollectionExist(name, symbol), "Duplicate Collection");
-        _createERC721Collection(
-            name,
-            symbol,
-            uri,
-            royaltyReceiver,
-            royaltyPercentage,
-            _owner(),
-            trustedForwarder
-        );
-    }
+    // function createERC721Collection(
+    //     string memory name,
+    //     string memory symbol,
+    //     string memory uri,
+    //     address royaltyReceiver,
+    //     uint256 royaltyPercentage,
+    //     address trustedForwarder
+    // ) external onlyOwner {
+    //     require(!_isCollectionExist(name, symbol), "Duplicate Collection");
+    //     _createERC721Collection(
+    //         name,
+    //         symbol,
+    //         uri,
+    //         royaltyReceiver,
+    //         royaltyPercentage,
+    //         _owner(),
+    //         trustedForwarder
+    //     );
+    // }
 
     function collections()
         external

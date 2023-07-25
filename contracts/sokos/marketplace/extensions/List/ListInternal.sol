@@ -144,6 +144,7 @@ abstract contract ListInternal is
             listing.endTime = _endTime;
             listing.cancelled = false;
             listing.sold = false;
+            l.listingIds.push(listingId);
             emit UpdateListing(
                 listingId,
                 _tokenAddress,
@@ -173,10 +174,10 @@ abstract contract ListInternal is
     function _listedNFTbyOwner(
         address _owner,
         address _tokenAddress,
-        uint256 _okenId
+        uint256 _tokenId
     ) internal view returns (ListStorage.Listing memory) {
         ListStorage.Layout storage l = ListStorage.layout();
-        uint256 listingId = l.tokenToListingId[_tokenAddress][_okenId][_owner];
+        uint256 listingId = l.tokenToListingId[_tokenAddress][_tokenId][_owner];
         return l.listings[listingId];
     }
 

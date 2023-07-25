@@ -2,6 +2,6 @@
 
 pragma solidity ^0.8.15;
 
-interface IERC2771ContextAdmin {
+interface IERC2771ContextOwnable {
     function setTrustedForwarder(address trustedForwarder) external;
 }

@@ -4,7 +4,7 @@ pragma solidity ^0.8.15;
 
 import "../access/ownable/OwnableInternal.sol";
 import "./ERC2771ContextStorage.sol";
-import "./IERC2771ContextAdmin.sol";
+import "./IERC2771ContextOwnable.sol";
 
 /**
  * @title ERC2771 Context - Admin - Ownable
@@ -12,9 +12,9 @@ import "./IERC2771ContextAdmin.sol";
  *
  * @custom:type eip-2535-facet
  * @custom:category Meta Transactions
- * @custom:provides-interfaces IERC2771ContextAdmin
+ * @custom:provides-interfaces IERC2771ContextOwnable
  */
-contract ERC2771ContextOwnable is IERC2771ContextAdmin, OwnableInternal {
+contract ERC2771ContextOwnable is IERC2771ContextOwnable, OwnableInternal {
     function setTrustedForwarder(address trustedForwarder) public onlyOwner {
         ERC2771ContextStorage.layout().trustedForwarder = trustedForwarder;
     }

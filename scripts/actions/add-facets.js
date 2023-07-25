@@ -6,28 +6,28 @@ const { getSelectors, FacetCutAction } = require("../libraries/diamond.js");
 async function erc20Token() {
     const accounts = await ethers.getSigners();
     const contractOwner = accounts[0];
-    const diamondAddress = "0x3FB54D69304FE2EB04F8da930DC992ac2697Bea7";
+    const diamondAddress = "0x1Ca513adea10d8bfA7e6eBe07b8e259e81Ad095d";
 
     const FacetNames = [
         // {
         //     name: "ERC2771Context",
-        //     address: "0x4C97989Ea3b7f3DC40b64183cCA0E734c08D5DD8",
+        //     address: "0x3E0A467A4F8AfBe508b9d674A7d2204698C316f1",
         // },
         // {
         //     name: "ERC2771ContextOwnable",
-        //     address: "0xbC65911F3b6BeF213685FF68d8095A6135d1C97e",
+        //     address: "0xFD2C3204fca9B59119c18AEaAa9d0dc3e2B6a9D0",
         // },
         // {
-        //     name: "Marketplace",
-        //     address: null,
+        //     name: "MarketplaceBaseOwnable",
+        //     address: "0x5580b328a9e3cEf94d87234CD65934c256A0E1F5",
         // },
         {
-            name: "Factory",
+            name: "Marketplace",
             address: null,
         },
         // {
-        //     name: "MarketplaceBaseOwnable",
-        //     address: "0x0Da76127b3C788759C88878E520e84BB0D87b61b",
+        //     name: "Factory",
+        //     address: null,
         // },
     ];
     const cut = [];
@@ -48,12 +48,11 @@ async function erc20Token() {
         cut.push({
             facetAddress: facet.address,
             action: FacetCutAction.Add,
-            functionSelectors: getSelectors(facet),
-            //.get([
-            // "cancelListing(address,uint256)",
-            // "getListingId(address,address,uint256)",
-            // "createListing(address,uint256,uint256,uint256,uint256,uint256)",
-            //  ]),
+            functionSelectors: getSelectors(facet).get([
+                // "cancelListing(address,uint256)",
+                // "getListingId(address,address,uint256)",
+                "createListing(address,uint256,uint256,uint256,uint256,uint256)",
+            ]),
         });
     }
     console.log("Cut", cut);
