@@ -6,7 +6,7 @@ const { getSelectors, FacetCutAction } = require("./../libraries/diamond.js");
 async function erc20Token() {
     const accounts = await ethers.getSigners();
     const contractOwner = accounts[0];
-    const diamondAddress = "0x7c09B35f3498C529e12f4C4a86C89bDffA873ee1";
+    const diamondAddress = "0xf09afD66F7302BD73CA3b3fb952C0926433C6936";
 
     const FacetNames = [
         // {
@@ -26,8 +26,8 @@ async function erc20Token() {
         //     address: "0xDF6ba301cefD18a28033F96BBD801Da69C36C636",
         // },
         {
-            name: "Factory",
-            address: "0x6316Ec7414fc25107C9EfC053714CC96d77D45D3",
+            name: "Marketplace",
+            address: "0x6A11F53B3026a756F77b0caaAA5caA92d4a12Ca4",
         },
     ];
     const cut = [];
@@ -49,12 +49,15 @@ async function erc20Token() {
             facetAddress: facet.address,
             action: FacetCutAction.Remove,
             functionSelectors: getSelectors(facet).get([
-                "collections()",
-                // "createERC1155Collection(string,string,string,address)",
-                // "createListing(address,uint256,uint256,uint256,uint256,uint256)",
-                // "getListingId(address,address,uint256)",
-                // "cancelListing(address,uint256)",
+                "offer(address,uint256)",
             ]),
+            // .get([
+            //     "collections()",
+            //     // "createERC1155Collection(string,string,string,address)",
+            //     // "createListing(address,uint256,uint256,uint256,uint256,uint256)",
+            //     // "getListingId(address,address,uint256)",
+            //     // "cancelListing(address,uint256)",
+            // ]),
         });
     }
     console.log("Cut", cut);

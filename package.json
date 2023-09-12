@@ -42,7 +42,6 @@
     "@types/mocha": ">=9.1.0",
     "axios": "^1.4.0",
     "erc721a-upgradeable": "^4.2.3",
-    "hardhat-gas-reporter": "^1.0.8",
     "moralis": "^2.19.0",
     "operator-filter-registry": "^1.4.1",
     "solidity-coverage": "^0.8.1",

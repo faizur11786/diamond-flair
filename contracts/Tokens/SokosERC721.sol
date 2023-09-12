@@ -2,16 +2,16 @@
 
 pragma solidity ^0.8.15;
 
-import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import { IERC2981, IERC165 } from "@openzeppelin/contracts/interfaces/IERC2981.sol";
+import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {IERC2981, IERC165} from "@openzeppelin/contracts/interfaces/IERC2981.sol";
 
-import { ERC721URIStorage, ERC721, Context } from "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-import { ERC721Burnable } from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
-import { ERC721Enumerable } from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
-import { Counters } from "@openzeppelin/contracts/utils/Counters.sol";
-import { AccessControl, Strings } from "@openzeppelin/contracts/access/AccessControl.sol";
-import { MetaContext } from "./common/MetaContext.sol";
-import { RoyaltiesV2Impl, LibPart } from "./common/RoyaltiesV2.sol";
+import {ERC721URIStorage, ERC721, Context} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import {ERC721Burnable} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
+import {ERC721Enumerable} from "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
+import {Counters} from "@openzeppelin/contracts/utils/Counters.sol";
+import {AccessControl, Strings} from "@openzeppelin/contracts/access/AccessControl.sol";
+import {MetaContext} from "./common/MetaContext.sol";
+import {RoyaltiesV2Impl, LibPart} from "./common/RoyaltiesV2.sol";
 
 contract SokosERC721 is
     IERC2981,
@@ -26,6 +26,8 @@ contract SokosERC721 is
     Counters.Counter public tokenCounter;
 
     bytes4 private constant _INTERFACE_ID_ERC2981 = 0x2a55205a;
+    bytes4 internal constant _INTERFACE_ID_ROYALTIES = 0xcad96cca;
+
     bytes32 public constant ADMIN_ROLE = keccak256("ADMIN_ROLE");
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
@@ -93,7 +95,7 @@ contract SokosERC721 is
         _safeMint(to, newItemId);
         _setTokenURI(newItemId, uri);
 
-        if (royaltyReceiver != address(0) && royaltyPercentage > 0) {
+        if (royaltyReceiver != address(0) && royaltyPercentage != 0) {
             LibPart.Part memory royalty = LibPart.Part({
                 value: royaltyPercentage,
                 account: royaltyReceiver
@@ -172,6 +174,8 @@ contract SokosERC721 is
     {
         return
             interfaceId == type(IERC2981).interfaceId ||
+            interfaceId == _INTERFACE_ID_ERC2981 ||
+            interfaceId == _INTERFACE_ID_ROYALTIES ||
             super.supportsInterface(interfaceId);
     }
 

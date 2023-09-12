@@ -4,16 +4,18 @@ pragma solidity ^0.8.15;
 
 library OfferStorage {
     struct OfferNFT {
-        address nft;
+        address tokenAddress;
         uint256 tokenId;
         address offerer;
         address payToken;
+        uint256 quantity;
         uint256 offerPrice;
         bool accepted;
+        uint256 expAt;
     }
     struct Layout {
-        // nft => tokenId => offerer address => offer struct
-        mapping(address => mapping(uint256 => mapping(address => OfferNFT))) offerNfts;
+        // listingId => offerer address => offer struct
+        mapping(uint256 => mapping(address => OfferNFT)) offerNfts;
     }
 
     bytes32 internal constant STORAGE_SLOT =
@@ -26,3 +28,5 @@ library OfferStorage {
         }
     }
 }
+
+contract Modifiers {}

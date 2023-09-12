@@ -11,27 +11,12 @@ import {OwnableInternal} from "../../../../access/ownable/OwnableInternal.sol";
 import {MarketplaceBaseInternal} from "../../base/MarketplaceBaseInternal.sol";
 import {ListStorage} from "./storage/ListStorage.sol";
 
-// import {ISokosNFT} from "./interfaces/ISokosNFT.sol";
-
-// import {MarketplaceBaseInternal} from "../../base/MarketplaceBaseInternal.sol";
-
 abstract contract ListInternal is
     OwnableInternal,
     IListInternal,
     MarketplaceBaseInternal
 {
     using ListStorage for ListStorage.Layout;
-
-    modifier isListedNFT(
-        address _tokenAddress,
-        uint256 _tokenId,
-        address _owner
-    ) {
-        uint256 listingId = _getListingId(_owner, _tokenAddress, _tokenId);
-        ListStorage.Listing memory listing = _listedNFT(listingId);
-        require(!listing.cancelled, "NOT_LISTED");
-        _;
-    }
 
     function _cancelListing(
         address _tokenAddress,
@@ -44,7 +29,7 @@ abstract contract ListInternal is
             if (l.listingIds[i] == listingId) {
                 ListStorage.Listing storage listing = l.listings[listingId];
                 require(listing.seller == _owner, "UNAUTHORIZED_OWNER");
-                listing.cancelled = true;
+                listing.isActive = false;
                 l.listingIds[i] = l.listingIds[l.listingIds.length - 1];
                 l.listingIds.pop();
                 emit CancelListing(
@@ -61,6 +46,7 @@ abstract contract ListInternal is
     }
 
     function _createListing(
+        address _payToken,
         address _tokenAddress,
         uint256 _tokenId,
         uint256 _quantity,
@@ -68,7 +54,6 @@ abstract contract ListInternal is
     ) internal {
         IERC1155 erc1155Token;
         IERC721 erc721Token;
-        bool isERC1155;
         if (IERC165(_tokenAddress).supportsInterface(INTERFACE_ID_ERC721)) {
             erc721Token = IERC721(_tokenAddress);
             require(
@@ -91,7 +76,6 @@ abstract contract ListInternal is
                 erc1155Token.isApprovedForAll(_msgSender(), address(this)),
                 "Not approved for transfer"
             );
-            isERC1155 = true;
         } else {
             revert ErrInvalidNFT();
         }
@@ -108,8 +92,8 @@ abstract contract ListInternal is
             l.listingIds.push(listId);
             l.tokenToListingId[_tokenAddress][_tokenId][_msgSender()] = listId;
             l.listings[listId] = ListStorage.Listing({
-                listingId: listId,
                 seller: _msgSender(),
+                payToken: _payToken,
                 tokenAddress: _tokenAddress,
                 tokenId: _tokenId,
                 quantity: _quantity,
@@ -117,10 +101,8 @@ abstract contract ListInternal is
                 priceInUsd: _priceInUsd,
                 timeCreated: block.timestamp,
                 timeLastPurchased: 0,
-                sourceListingId: 0,
                 sold: false,
-                cancelled: false,
-                isERC1155: isERC1155
+                isActive: true
             });
 
             emit ListingAdd(
@@ -136,7 +118,8 @@ abstract contract ListInternal is
             ListStorage.Listing storage listing = l.listings[listingId];
             listing.quantity = _quantity;
             listing.priceInUsd = _priceInUsd;
-            listing.cancelled = false;
+            listing.payToken = _payToken;
+            listing.isActive = true;
             listing.sold = false;
             l.listingIds.push(listingId);
             emit UpdateListing(
@@ -205,4 +188,25 @@ abstract contract ListInternal is
         }
         return nfts;
     }
+
+    modifier isListed(uint256 listId) {
+        ListStorage.Layout storage l = ListStorage.layout();
+        ListStorage.Listing memory listing = l.listings[listId];
+        require(listing.isActive && listing.quantity > 0, "NOT_LISTED");
+        _;
+    }
+
+    // function isListed(uint256 _listingId) public view returns (bool) {
+    //     ListStorage.Layout storage l = ListStorage.layout();
+    //     ListStorage.Listing memory listing = l.listings[_listingId];
+    //     if (listing.cancelled) {
+    //         return false;
+    //     } else if (listing.sold) {
+    //         return false;
+    //     } else if (listing.quantity == 0) {
+    //         return false;
+    //     } else {
+    //         return true;
+    //     }
+    // }
 }

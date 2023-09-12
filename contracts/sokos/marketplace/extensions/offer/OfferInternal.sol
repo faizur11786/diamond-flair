@@ -13,69 +13,94 @@ import {ListStorage} from "../list/storage/ListStorage.sol";
 abstract contract OfferInternal is IOfferInternal, MarketplaceBaseInternal {
     using OfferStorage for OfferStorage.Layout;
 
-    modifier isOfferredNFT(
-        address _nft,
-        uint256 _tokenId,
-        address _offerer
-    ) {
-        OfferStorage.OfferNFT memory offer = OfferStorage.layout().offerNfts[
-            _nft
-        ][_tokenId][_offerer];
+    modifier isOfferred(address offerer, uint256 listId) {
+        OfferStorage.Layout storage l = OfferStorage.layout();
+        OfferStorage.OfferNFT memory offer = l.offerNfts[listId][offerer];
         require(
             offer.offerPrice > 0 && offer.offerer != address(0),
-            "not offerred nft"
+            "NOT_OFFERRED"
         );
         _;
     }
 
-    // @notice Offer listed NFT
-    // function _offerNFT(
-    //     address _nft,
-    //     uint256 _tokenId,
-    //     address _payToken,
-    //     uint256 _offerPrice
-    // ) internal {
-    //     require(_offerPrice > 0, "price can not 0");
+    function _offer(
+        address payToken,
+        uint256 listingId,
+        uint256 quantity,
+        uint256 offerPrice,
+        uint256 expAt
+    ) internal returns (bool) {
+        OfferStorage.Layout storage l = OfferStorage.layout();
+        ListStorage.Layout storage listL = ListStorage.layout();
+        ListStorage.Listing memory listing = listL.listings[listingId];
 
-    //     if (IERC165(_nft).supportsInterface(INTERFACE_ID_ERC721)) {} else {
-    //         ListStorage.Layout storage l = ListStorage.layout();
+        l.offerNfts[listingId][_msgSender()] = OfferStorage.OfferNFT({
+            tokenAddress: listing.tokenAddress,
+            tokenId: listing.tokenId,
+            offerer: _msgSender(),
+            payToken: payToken,
+            quantity: quantity,
+            offerPrice: offerPrice,
+            accepted: false,
+            expAt: expAt
+        });
+        emit OfferCreated(listingId, _msgSender(), payToken, offerPrice, expAt);
+        return true;
+    }
 
-    //         uint256 listingId = l.TokenToListingId[_nft][_tokenId][
-    //             _msgSender()
-    //         ];
-    //         ListStorage.Listing memory nft = l.Listings[
-    //             listingId
-    //         ];
+    function _accept(address token) internal returns (bool) {
+        // if (
+        //     IERC165(listed.tokenAddress).supportsInterface(INTERFACE_ID_ERC2981)
+        // ) {
+        //     (address royaltiesReceiver, uint256 royaltiesAmount) = IERC2981(
+        //         listed.tokenAddress
+        //     ).royaltyInfo(listed.tokenId, price);
+        //     if (royaltiesAmount > 0 && royaltiesReceiver != address(0)) {
+        //         // Pay Royalty
+        //     }
+        // }
+        // IERC1155 erc1155Token;
+        // IERC721 erc721Token;
+        // if (
+        //     IERC165(listed.tokenAddress).supportsInterface(INTERFACE_ID_ERC721)
+        // ) {
+        //     erc721Token = IERC721(listed.tokenAddress);
+        //     require(
+        //         erc721Token.ownerOf(listed.tokenId) == _msgSender(),
+        //         "Not owning item"
+        //     );
+        //     require(
+        //         erc721Token.isApprovedForAll(_msgSender(), address(this)),
+        //         "Not approved for transfer"
+        //     );
+        //     return true;
+        // } else if (
+        //     IERC165(listed.tokenAddress).supportsInterface(INTERFACE_ID_ERC1155)
+        // ) {
+        //     erc1155Token = IERC1155(listed.tokenAddress);
+        //     require(
+        //         erc1155Token.balanceOf(_msgSender(), listed.tokenId) >=
+        //             offered.quantity,
+        //         "Not enough ERC1155 token"
+        //     );
+        //     require(
+        //         erc1155Token.isApprovedForAll(_msgSender(), address(this)),
+        //         "Not approved for transfer"
+        //     );
+        //     return true;
+        // } else {
+        //     revert ErrInvalidNFT();
+        // }
+        // return true;
+    }
 
-    //         // IERC20(nft.payToken).transferFrom(
-    //         //     msg.sender,
-    //         //     address(this),
-    //         //     _offerPrice
-    //         // );
-    //     }
-
-    // ListNFT memory nft = listNfts[_nft][_tokenId];
-    // IERC20(nft.payToken).transferFrom(
-    //     msg.sender,
-    //     address(this),
-    //     _offerPrice
-    // );
-
-    // offerNfts[_nft][_tokenId][msg.sender] = OfferNFT({
-    //     nft: nft.nft,
-    //     tokenId: nft.tokenId,
-    //     offerer: msg.sender,
-    //     payToken: _payToken,
-    //     offerPrice: _offerPrice,
-    //     accepted: false
-    // });
-
-    // emit OfferredNFT(
-    //     nft.nft,
-    //     nft.tokenId,
-    //     nft.payToken,
-    //     _offerPrice,
-    //     msg.sender
-    // );
-    // }
+    function _afterOfferAccept(
+        uint256 listId,
+        address offerer,
+        address seller,
+        address payToken,
+        uint256 pricePiad
+    ) internal {
+        emit OfferAccepted(listId, offerer, seller, payToken, pricePiad);
+    }
 }

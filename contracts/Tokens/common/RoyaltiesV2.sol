@@ -21,7 +21,7 @@ interface IRoyaltiesV2 {
 abstract contract AbstractRoyalties {
     mapping(uint256 => LibPart.Part) internal royalties;
 
-     function _onRoyaltiesSet(
+    function _onRoyaltiesSet(
         uint256 id,
         LibPart.Part memory _royalties
     ) internal virtual;

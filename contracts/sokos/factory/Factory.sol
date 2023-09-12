@@ -2,10 +2,10 @@
 
 pragma solidity ^0.8.15;
 
-import { OwnableInternal } from "../../access/ownable/OwnableInternal.sol";
+import {OwnableInternal} from "../../access/ownable/OwnableInternal.sol";
 
-import { FactoryStorage } from "./storage/FactoryStorage.sol";
-import { FactoryInternal } from "./FactoryInternal.sol";
+import {FactoryStorage} from "./storage/FactoryStorage.sol";
+import {FactoryInternal} from "./FactoryInternal.sol";
 
 /**
  * @title Factory - Admin - Ownable

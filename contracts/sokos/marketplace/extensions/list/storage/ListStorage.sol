@@ -4,8 +4,8 @@ pragma solidity ^0.8.15;
 
 library ListStorage {
     struct Listing {
-        uint256 listingId;
         address seller;
+        address payToken;
         address tokenAddress;
         uint256 tokenId;
         uint256 quantity;
@@ -13,10 +13,8 @@ library ListStorage {
         uint256 priceInUsd;
         uint256 timeCreated;
         uint256 timeLastPurchased;
-        uint256 sourceListingId;
         bool sold;
-        bool cancelled;
-        bool isERC1155;
+        bool isActive;
     }
     struct Layout {
         uint256 nextListingId;

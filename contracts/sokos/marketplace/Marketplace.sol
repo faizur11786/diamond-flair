@@ -5,6 +5,7 @@ pragma solidity ^0.8.15;
 import "./base/MarketplaceBaseERC2771.sol";
 import {AuctionExtension} from "./extensions/auction/AuctionExtension.sol";
 import {ListExtension} from "./extensions/list/ListExtension.sol";
+import {OfferExtension} from "./extensions/offer/OfferExtension.sol";
 import {MarketplaceBaseInternal} from "./base/MarketplaceBaseInternal.sol";
 
 /**
@@ -18,6 +19,7 @@ import {MarketplaceBaseInternal} from "./base/MarketplaceBaseInternal.sol";
 contract Marketplace is
     MarketplaceBaseERC2771,
     ListExtension,
+    OfferExtension,
     AuctionExtension
 {
     function _msgSender()

@@ -6,6 +6,7 @@ import {ListStorage} from "../storage/ListStorage.sol";
 
 interface IListExtension {
     function createListing(
+        address payToken,
         address tokenAddress,
         uint256 tokenId,
         uint256 quantity,
@@ -14,7 +15,8 @@ interface IListExtension {
 
     function cancelListing(
         address tokenAddress,
-        uint256 tokenId
+        uint256 tokenId,
+        uint256 listingId
     ) external returns (bool);
 
     function listedNFT(

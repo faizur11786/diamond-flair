@@ -1,10 +1,10 @@
 module.exports = [
     "0x675bE6d0B35117D21C538d3363C5DB7699658157",
     {
-        diamondCutFacet: "0x34828D9eFc55150A9F48fCb29CBCbC6E5b1d7B60",
-        diamondLoupeFacet: "0x5d803768C0105b3AC0dCbD69425e8ab5c8EB6462",
-        erc165Facet: "0x653EDDD80D77EBBa4310cE0f60fb5eE18b3f41a8",
-        erc173Facet: "0xa8665a3F55d10E1FD2d533005325564Efb6aDAEc",
+        diamondCutFacet: "0x481Aa444752b658DA3F19116C736f0c5006aCF7e",
+        diamondLoupeFacet: "0x49b42BA1cFB390D42888CF6Cb3b75460662A25DA",
+        erc165Facet: "0xD8073e8F3FAc5aDDD5DB7EbaEC7F0af0D8B1d57a",
+        erc173Facet: "0xB92e18540cc14920C6BE8961F89ec53558a49a6E",
     },
     [],
     [],

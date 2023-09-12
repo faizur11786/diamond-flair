@@ -10,31 +10,21 @@ import {ListStorage} from "./storage/ListStorage.sol";
 import {ListInternal} from "./ListInternal.sol";
 
 abstract contract ListExtension is IListExtension, ListInternal {
-    using ListStorage for ListStorage.Layout;
-
     function createListing(
+        address payToken,
         address tokenAddress,
         uint256 tokenId,
         uint256 quantity,
         uint256 priceInUsd
     ) external virtual {
-        _createListing(
-            tokenAddress,
-            tokenId,
-            quantity,
-            priceInUsd
-        );
+        _createListing(payToken, tokenAddress, tokenId, quantity, priceInUsd);
     }
 
     function cancelListing(
         address tokenAddress,
-        uint256 tokenId
-    )
-        external
-        virtual
-        isListedNFT(tokenAddress, tokenId, _msgSender())
-        returns (bool)
-    {
+        uint256 tokenId,
+        uint256 listingId
+    ) external virtual isListed(listingId) returns (bool) {
         bool success = _cancelListing(tokenAddress, tokenId, _msgSender());
         if (!success) {
             revert ErrCancelListingFailed();

@@ -2,16 +2,16 @@
 
 pragma solidity ^0.8.15;
 
-import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
-import {IERC1155MetadataURI} from "@openzeppelin/contracts/token/ERC1155/extensions/IERC1155MetadataURI.sol";
+import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import { IERC1155MetadataURI } from "@openzeppelin/contracts/token/ERC1155/extensions/IERC1155MetadataURI.sol";
 
-import {ERC1155, ERC1155URIStorage, Context, IERC165} from "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155URIStorage.sol";
-import {ERC1155Burnable} from "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
-import {ERC1155Supply} from "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";
-import {MetaContext} from "./common/MetaContext.sol";
-import {RoyaltiesV2Impl, LibPart} from "./common/RoyaltiesV2.sol";
-import {Counters} from "@openzeppelin/contracts/utils/Counters.sol";
-import {AccessControl, Strings} from "@openzeppelin/contracts/access/AccessControl.sol";
+import { ERC1155, ERC1155URIStorage, Context, IERC165 } from "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155URIStorage.sol";
+import { ERC1155Burnable } from "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Burnable.sol";
+import { ERC1155Supply } from "@openzeppelin/contracts/token/ERC1155/extensions/ERC1155Supply.sol";
+import { MetaContext } from "./common/MetaContext.sol";
+import { RoyaltiesV2Impl, LibPart } from "./common/RoyaltiesV2.sol";
+import { Counters } from "@openzeppelin/contracts/utils/Counters.sol";
+import { AccessControl, Strings } from "@openzeppelin/contracts/access/AccessControl.sol";
 
 contract SokosERC1155 is
     IERC1155MetadataURI,
@@ -134,7 +134,7 @@ contract SokosERC1155 is
         _mint(to, _id, amount, tokenURI);
         _setURI(_id, string(tokenURI));
 
-        if (royaltyReceiver != address(0) && royaltyPercentage > 0) {
+        if (royaltyReceiver != address(0) && royaltyPercentage != 0) {
             LibPart.Part memory royalty = LibPart.Part({
                 value: royaltyPercentage,
                 account: royaltyReceiver
